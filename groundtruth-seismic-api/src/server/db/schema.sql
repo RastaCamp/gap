@@ -1,0 +1,63 @@
+PRAGMA journal_mode = WAL;
+PRAGMA foreign_keys = ON;
+PRAGMA synchronous = NORMAL;
+
+CREATE TABLE IF NOT EXISTS events (
+  id           TEXT PRIMARY KEY,
+  source       TEXT NOT NULL CHECK(source IN ('usgs_earthquake','iris','vaac','rsoe','tsunami','smithsonian_gvp')),
+  source_id    TEXT NOT NULL,
+  title        TEXT NOT NULL,
+  summary      TEXT NOT NULL DEFAULT '',
+  event_type   TEXT NOT NULL DEFAULT 'earthquake',
+  magnitude    REAL,
+  latitude     REAL,
+  longitude    REAL,
+  depth_km     REAL,
+  occurred_at  TEXT,
+  source_url   TEXT,
+  raw_json     TEXT NOT NULL DEFAULT '{}',
+  content_hash TEXT NOT NULL,
+  created_at   TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at   TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(source, source_id)
+);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS events_fts USING fts5(
+  title, summary, event_type, content='events', content_rowid='rowid'
+);
+CREATE TRIGGER IF NOT EXISTS events_fts_insert AFTER INSERT ON events BEGIN
+  INSERT INTO events_fts(rowid, title, summary, event_type) VALUES (new.rowid, new.title, new.summary, new.event_type);
+END;
+CREATE TRIGGER IF NOT EXISTS events_fts_update AFTER UPDATE ON events BEGIN
+  INSERT INTO events_fts(events_fts, rowid, title, summary, event_type) VALUES ('delete', old.rowid, old.title, old.summary, old.event_type);
+  INSERT INTO events_fts(rowid, title, summary, event_type) VALUES (new.rowid, new.title, new.summary, new.event_type);
+END;
+CREATE TRIGGER IF NOT EXISTS events_fts_delete AFTER DELETE ON events BEGIN
+  INSERT INTO events_fts(events_fts, rowid, title, summary, event_type) VALUES ('delete', old.rowid, old.title, old.summary, old.event_type);
+END;
+
+CREATE INDEX IF NOT EXISTS idx_events_source    ON events(source);
+CREATE INDEX IF NOT EXISTS idx_events_type      ON events(event_type);
+CREATE INDEX IF NOT EXISTS idx_events_occurred   ON events(occurred_at DESC);
+CREATE INDEX IF NOT EXISTS idx_events_content_hash ON events(content_hash);
+
+CREATE TABLE IF NOT EXISTS sync_jobs (
+  id TEXT PRIMARY KEY, source TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending',
+  started_at TEXT NOT NULL DEFAULT (datetime('now')), finished_at TEXT,
+  records_added INTEGER NOT NULL DEFAULT 0, records_updated INTEGER NOT NULL DEFAULT 0, records_removed INTEGER NOT NULL DEFAULT 0,
+  error_message TEXT, snapshot_files TEXT NOT NULL DEFAULT '[]'
+);
+CREATE INDEX IF NOT EXISTS idx_jobs_status ON sync_jobs(status);
+CREATE INDEX IF NOT EXISTS idx_jobs_started ON sync_jobs(started_at DESC);
+
+CREATE TABLE IF NOT EXISTS diff_log (
+  id TEXT PRIMARY KEY, job_id TEXT NOT NULL, source TEXT NOT NULL, source_id TEXT NOT NULL,
+  action TEXT NOT NULL CHECK(action IN ('added','updated','removed')), old_hash TEXT, new_hash TEXT,
+  changed_at TEXT NOT NULL DEFAULT (datetime('now')), summary TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_diff_job ON diff_log(job_id);
+CREATE INDEX IF NOT EXISTS idx_diff_source_id ON diff_log(source, source_id);
+
+CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, email TEXT NOT NULL UNIQUE, name TEXT NOT NULL DEFAULT '', region TEXT NOT NULL DEFAULT '', role TEXT NOT NULL DEFAULT 'user' CHECK(role IN ('user','admin','debug')), usage_limit INTEGER NOT NULL DEFAULT 10000, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')));
+CREATE TABLE IF NOT EXISTS api_usage (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id), period_start TEXT NOT NULL, request_count INTEGER NOT NULL DEFAULT 0, UNIQUE(user_id, period_start));
+CREATE INDEX IF NOT EXISTS idx_usage_user_period ON api_usage(user_id, period_start);

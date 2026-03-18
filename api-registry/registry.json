@@ -1,0 +1,239 @@
+{
+  "version": "1.0",
+  "updated": "2025-03-15",
+  "projects": {
+    "myair": {
+      "name": "MyAir Local API",
+      "description": "Air quality, radiation, atmosphere",
+      "status": "yes",
+      "sources": [
+        { "id": "airnow", "name": "EPA AirNow", "docs": "https://docs.airnowapi.org/", "api_key": "required" },
+        { "id": "radnet", "name": "EPA RadNet", "endpoint": "https://enviro.epa.gov/enviro/efservice/radnet_monitor/JSON", "docs": "https://www.epa.gov/radnet" },
+        { "id": "copernicus", "name": "Copernicus Atmosphere", "docs": "https://atmosphere.copernicus.eu/" },
+        { "id": "tri", "name": "EPA TRI", "docs": "https://www.epa.gov/toxics-release-inventory-tri-program" },
+        { "id": "usgs_water", "name": "USGS Water Quality", "docs": "https://waterservices.usgs.gov/" }
+      ]
+    },
+    "groundtruth-seismic": {
+      "name": "GroundTruth Seismic API",
+      "description": "Earthquakes, volcanic ash, seismic data",
+      "status": "mostly_yes",
+      "sources": [
+        { "id": "usgs_earthquake", "name": "USGS Earthquake Hazards", "endpoint": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson", "docs": "https://earthquake.usgs.gov/fdsnws/event/1/" },
+        { "id": "iris", "name": "IRIS Seismological Consortium", "docs": "https://service.iris.edu/" },
+        { "id": "vaac", "name": "Volcanic Ash Advisory Centers", "docs": "https://www.icao.int/safety/meteorology/Pages/VAAC.aspx" },
+        { "id": "rsoe", "name": "RSOE Disaster feed", "docs": "https://rsoe-edis.org/" }
+      ]
+    },
+    "skywatch": {
+      "name": "SkyWatch Unified API",
+      "description": "Space weather, satellites, solar",
+      "status": "yes",
+      "sources": [
+        { "id": "noaa_swpc", "name": "NOAA Space Weather Prediction Center", "base": "https://services.swpc.noaa.gov/json/", "docs": "https://www.swpc.noaa.gov/products-and-data" },
+        { "id": "n2yo", "name": "N2YO Satellite API", "docs": "https://www.n2yo.com/api/" },
+        { "id": "met_no", "name": "MET Norway (moon etc)", "docs": "https://api.met.no/" }
+      ]
+    },
+    "watersafe": {
+      "name": "WaterSafe ZIP API",
+      "description": "Tap water, SDWIS, water quality by ZIP",
+      "status": "partial",
+      "sources": [
+        { "id": "ewg", "name": "EWG Tap Water Database", "docs": "https://www.ewg.org/tapwater/", "note": "No public API, dataset only" },
+        { "id": "sdwis", "name": "EPA SDWIS", "docs": "https://www.epa.gov/sdwis" },
+        { "id": "usgs_water", "name": "USGS Water API", "docs": "https://waterservices.usgs.gov/" }
+      ]
+    },
+    "gridstatus": {
+      "name": "GridStatus API",
+      "description": "Grid demand, outages, real-time",
+      "status": "yes",
+      "sources": [
+        { "id": "eia", "name": "U.S. EIA", "endpoint": "https://api.eia.gov/v2/electricity/rto/region-data/data/", "docs": "https://www.eia.gov/opendata/" },
+        { "id": "noaa_swpc", "name": "NOAA SWPC geomagnetic", "docs": "https://services.swpc.noaa.gov/" }
+      ]
+    },
+    "newssignal": {
+      "name": "NewsSignal API",
+      "description": "RSS and news aggregation",
+      "status": "yes",
+      "sources": [
+        { "id": "noaa_alerts", "name": "NOAA Weather Alerts", "endpoint": "https://api.weather.gov/alerts/active", "docs": "https://www.weather.gov/documentation/services-web-api" },
+        { "id": "gdacs", "name": "GDACS", "feed": "https://www.gdacs.org/xml/rss.xml" }
+      ]
+    },
+    "biosurge": {
+      "name": "BioSurge Early Warning API",
+      "description": "Disease outbreaks, CDC, ProMED",
+      "status": "partial",
+      "sources": [
+        { "id": "cdc", "name": "CDC Data Portal", "docs": "https://data.cdc.gov/" },
+        { "id": "aphis", "name": "USDA APHIS", "docs": "https://www.aphis.usda.gov/" },
+        { "id": "promed", "name": "ProMED outbreak alerts", "docs": "https://promedmail.org/" },
+        { "id": "birdcast", "name": "BirdCast migration", "docs": "https://birdcast.info/api/" }
+      ]
+    },
+    "neighborhoodscore": {
+      "name": "NeighborhoodScore API",
+      "description": "Local safety, crime, CDC PLACES",
+      "status": "yes",
+      "sources": [
+        { "id": "baltimore", "name": "Baltimore Open Data", "docs": "https://data.baltimorecity.gov/" },
+        { "id": "cityprotect", "name": "CityProtect crime", "docs": "https://www.cityprotect.com/" },
+        { "id": "cdc_places", "name": "CDC PLACES", "docs": "https://www.cdc.gov/places/" },
+        { "id": "airnow", "name": "EPA AirNow", "docs": "https://docs.airnowapi.org/" },
+        { "id": "nsopw", "name": "NSOPW registry", "docs": "https://nsopw.gov/" }
+      ]
+    }
+  },
+  "apis": [
+    {
+      "id": "usgs_earthquake",
+      "name": "USGS Earthquake Hazards Program",
+      "category": "geophysical",
+      "base_url": "https://earthquake.usgs.gov",
+      "best_endpoint": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
+      "docs": "https://earthquake.usgs.gov/fdsnws/event/1/",
+      "auth": "none",
+      "tracks": ["earthquakes", "aftershocks", "seismic swarms"]
+    },
+    {
+      "id": "smithsonian_volcano",
+      "name": "Smithsonian Global Volcanism Program",
+      "category": "geophysical",
+      "best_endpoint": "https://volcano.si.edu/news/WeeklyVolcanoRSS.xml",
+      "docs": "https://volcano.si.edu/database/",
+      "auth": "none"
+    },
+    {
+      "id": "nasa_firms",
+      "name": "NASA FIRMS Wildfire Detection",
+      "category": "geophysical",
+      "docs": "https://firms.modaps.eosdis.nasa.gov/",
+      "auth": "api_key",
+      "api_key_note": "free"
+    },
+    {
+      "id": "noaa_tsunami",
+      "name": "NOAA Tsunami Warning Center",
+      "category": "geophysical",
+      "best_endpoint": "https://www.tsunami.gov/events/xml/PHEB_current.xml",
+      "docs": "https://www.tsunami.gov/"
+    },
+    {
+      "id": "noaa_swpc",
+      "name": "NOAA Space Weather Prediction Center",
+      "category": "space_weather",
+      "endpoints": [
+        { "name": "solar_flares", "url": "https://services.swpc.noaa.gov/json/goes/primary/xrays-7-day.json" },
+        { "name": "geomagnetic", "url": "https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json" },
+        { "name": "solar_wind", "url": "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json" }
+      ],
+      "docs": "https://www.swpc.noaa.gov/products-and-data",
+      "auth": "none"
+    },
+    {
+      "id": "nasa_neo",
+      "name": "NASA NEO API",
+      "category": "neo",
+      "best_endpoint": "https://api.nasa.gov/neo/rest/v1/feed?api_key=DEMO_KEY",
+      "docs": "https://api.nasa.gov/",
+      "auth": "api_key"
+    },
+    {
+      "id": "noaa_tides",
+      "name": "NOAA Tides & Currents",
+      "category": "ocean",
+      "base": "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter",
+      "docs": "https://api.tidesandcurrents.noaa.gov/api/prod/",
+      "auth": "none"
+    },
+    {
+      "id": "airnow",
+      "name": "EPA AirNow",
+      "category": "air_quality",
+      "docs": "https://docs.airnowapi.org/",
+      "auth": "api_key",
+      "api_key_note": "free"
+    },
+    {
+      "id": "radnet",
+      "name": "EPA RadNet",
+      "category": "air_quality",
+      "best_endpoint": "https://enviro.epa.gov/enviro/efservice/radnet_monitor/JSON",
+      "docs": "https://www.epa.gov/radnet",
+      "auth": "none"
+    },
+    {
+      "id": "eia",
+      "name": "U.S. Energy Information Administration",
+      "category": "energy",
+      "best_endpoint": "https://api.eia.gov/v2/electricity/rto/region-data/data/",
+      "docs": "https://www.eia.gov/opendata/"
+    },
+    {
+      "id": "gridstatus_io",
+      "name": "GridStatus API",
+      "category": "energy",
+      "docs": "https://www.gridstatus.io/api"
+    },
+    {
+      "id": "abuseipdb",
+      "name": "AbuseIPDB",
+      "category": "cyber",
+      "docs": "https://docs.abuseipdb.com/",
+      "auth": "api_key"
+    },
+    {
+      "id": "bgpview",
+      "name": "BGPView API",
+      "category": "cyber",
+      "best_endpoint": "https://api.bgpview.io/status",
+      "docs": "https://bgpview.docs.apiary.io/",
+      "auth": "none"
+    },
+    {
+      "id": "usgs_waterwatch",
+      "name": "USGS Water Data for the Nation (WDFN)",
+      "category": "flood",
+      "base_url": "https://api.waterdata.usgs.gov/ogcapi/",
+      "docs": "https://waterdata.usgs.gov/blog/api-waterservices-decom/",
+      "note": "Legacy WaterWatch retiring ~Feb 2026; use WDFN OGC API"
+    },
+    {
+      "id": "drought_monitor",
+      "name": "U.S. Drought Monitor",
+      "category": "drought",
+      "base_url": "https://usdmdataservices.unl.edu/api/",
+      "docs": "https://droughtmonitor.unl.edu/DmData/DataDownload/WebServiceInfo.aspx",
+      "auth": "none"
+    },
+    {
+      "id": "nsidc",
+      "name": "NSIDC Sea Ice (Polar)",
+      "category": "polar",
+      "docs": "https://nsidc.org/",
+      "formats": ["NetCDF", "OPeNDAP"]
+    },
+    {
+      "id": "who_gho",
+      "name": "WHO GHO OData API",
+      "category": "disease",
+      "base_url": "https://ghoapi.azureedge.net/api",
+      "auth": "none"
+    },
+    {
+      "id": "who_publications",
+      "name": "WHO Publications API",
+      "category": "disease",
+      "base_url": "https://www.who.int/api/hubs/meetingreports"
+    },
+    {
+      "id": "clinical_trials",
+      "name": "ClinicalTrials.gov API v2",
+      "category": "disease",
+      "base_url": "https://clinicaltrials.gov/api/v2/studies"
+    }
+  ]
+}

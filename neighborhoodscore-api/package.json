@@ -1,0 +1,13 @@
+{
+  "name": "neighborhoodscore-api",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run src/server/index.ts",
+    "dev:frontend": "cd frontend && bun run dev",
+    "ingest": "bun run src/ingestion/worker.ts",
+    "db:init": "bun run src/server/db/init.ts"
+  },
+  "dependencies": { "zod": "^3.22.4" },
+  "devDependencies": { "@types/bun": "latest" }
+}
