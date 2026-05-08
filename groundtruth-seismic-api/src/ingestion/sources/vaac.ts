@@ -15,7 +15,7 @@ function parseRssItems(xml: string): Array<{ title: string; link: string; pubDat
     const link = block.match(/<link[^>]*>([\s\S]*?)<\/link>/i)?.[1]?.trim() ?? "";
     const pubDate = block.match(/<pubDate[^>]*>([\s\S]*?)<\/pubDate>/i)?.[1]?.trim() ?? "";
     const description = block.match(/<description[^>]*>([\s\S]*?)<\/description>/i)?.[1]?.replace(/<[^>]+>/g, " ").trim() ?? "";
-    const guid = block.match(/<guid[^>]*>([\s\S]*?)<\/guid>/i)?.[1]?.trim() ?? link || `vaac-${pubDate}-${title.slice(0, 30)}`;
+    const guid = block.match(/<guid[^>]*>([\s\S]*?)<\/guid>/i)?.[1]?.trim() ?? (link || `vaac-${pubDate}-${title.slice(0, 30)}`);
     items.push({ title, link, pubDate, description, guid });
   }
   return items;

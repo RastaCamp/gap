@@ -1,6 +1,7 @@
 <script>
   import Landing from "./Landing.svelte";
   import Login from "./Login.svelte";
+  import Register from "./Register.svelte";
   import Dashboard from "./Dashboard.svelte";
   import Admin from "./Admin.svelte";
   import ApiProduct from "./ApiProduct.svelte";
@@ -26,6 +27,8 @@
 <div class="app">
   {#if page === "login"}
     <Login />
+  {:else if page === "register"}
+    <Register />
   {:else if page === "dashboard"}
     <Dashboard />
   {:else if page === "admin"}

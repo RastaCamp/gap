@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GridStatus — static console</title>
+  <style>
+    :root { font-family: system-ui, sans-serif; }
+    body { max-width: 52rem; margin: 0 auto; padding: 1rem 1.25rem; line-height: 1.45; }
+    header { border-bottom: 1px solid #ddd; padding-bottom: 1rem; margin-bottom: 1.25rem; }
+    .row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
+    label { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.88rem; }
+    input { padding: 0.45rem; font: inherit; min-width: 12rem; }
+    button { padding: 0.45rem 0.85rem; font: inherit; cursor: pointer; }
+    .msg { font-size: 0.9rem; margin: 0.5rem 0; }
+    .err { color: #b00020; }
+    .ok { color: #046; }
+    pre { background: #f6f8fa; padding: 1rem; overflow: auto; font-size: 0.8rem; border-radius: 6px; max-height: 24rem; }
+    section { margin-bottom: 1.5rem; }
+    code { background: #eee; padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.85em; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>GridStatus API — client console</h1>
+    <p>Static page. Set <code>API_BASE_URL</code> below to your deployed API (must allow CORS). Data endpoints require sign-in and an <strong>active subscription</strong> (or admin account).</p>
+    <p class="msg" id="pricingLine">Loading price…</p>
+  </header>
+
+  <section>
+    <h2>Account</h2>
+    <div class="row">
+      <label>Email <input type="email" id="email" autocomplete="username" /></label>
+      <label>Password <input type="password" id="password" autocomplete="current-password" /></label>
+    </div>
+    <div class="row" style="margin-top:0.5rem">
+      <button type="button" id="btnLogin">Sign in</button>
+      <button type="button" id="btnRegister">Register</button>
+      <button type="button" id="btnLogout">Sign out</button>
+      <button type="button" id="btnSubscribe">Subscribe ($/mo)</button>
+    </div>
+    <p id="authMsg" class="msg"></p>
+  </section>
+
+  <section>
+    <h2>Live API</h2>
+    <p>Fetches <code id="pathLabel"></code> with your bearer token.</p>
+    <button type="button" id="btnLoad">Load data</button>
+    <p id="apiMsg" class="msg"></p>
+    <pre id="out">(not loaded)</pre>
+  </section>
+
+  <script>
+    /** Full URL of the GridStatus API, e.g. https://api.example.com or http://localhost:3001 */
+    const API_BASE_URL = "";
+    const API_DATA_PATH = "/api/readings";
+
+    const base = API_BASE_URL.replace(/\/$/, "");
+    const pathEl = document.getElementById("pathLabel");
+    pathEl.textContent = API_DATA_PATH;
+
+    function authHeaders() {
+      const t = localStorage.getItem("gap_token_gridstatus");
+      return t ? { Authorization: "Bearer " + t } : {};
+    }
+
+    function setMsg(el, text, cls) {
+      el.textContent = text;
+      el.className = "msg " + (cls || "");
+    }
+
+    async function refreshPricing() {
+      try {
+        const r = await fetch(base + "/api/pricing");
+        const j = await r.json();
+        const usd = j.monthly_price_usd ?? 20;
+        document.getElementById("pricingLine").innerHTML =
+          "Public plan: <strong>$" + usd + "</strong>/month — change via API env <code>MONTHLY_PRICE_USD</code>.";
+        document.getElementById("btnSubscribe").textContent = "Subscribe ($" + usd + "/mo)";
+      } catch {
+        document.getElementById("pricingLine").textContent = "Could not load /api/pricing (check API_BASE_URL).";
+      }
+    }
+
+    document.getElementById("btnLogin").onclick = async () => {
+      const msg = document.getElementById("authMsg");
+      setMsg(msg, "…");
+      const res = await fetch(base + "/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: document.getElementById("email").value.trim(),
+          password: document.getElementById("password").value,
+          remember: true,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) { setMsg(msg, data.error || "Login failed", "err"); return; }
+      localStorage.setItem("gap_token_gridstatus", data.token);
+      setMsg(msg, "Signed in as " + (data.user && data.user.email), "ok");
+    };
+
+    document.getElementById("btnRegister").onclick = async () => {
+      const msg = document.getElementById("authMsg");
+      const res = await fetch(base + "/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: document.getElementById("email").value.trim(),
+          password: document.getElementById("password").value,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) { setMsg(msg, data.error || "Register failed", "err"); return; }
+      localStorage.setItem("gap_token_gridstatus", data.token);
+      setMsg(msg, "Registered and signed in.", "ok");
+    };
+
+    document.getElementById("btnLogout").onclick = async () => {
+      await fetch(base + "/api/logout", {
+        method: "POST",
+        headers: authHeaders(),
+      }).catch(() => {});
+      localStorage.removeItem("gap_token_gridstatus");
+      setMsg(document.getElementById("authMsg"), "Signed out.", "ok");
+    };
+
+    document.getElementById("btnSubscribe").onclick = async () => {
+      const msg = document.getElementById("authMsg");
+      const res = await fetch(base + "/api/billing/checkout", {
+        method: "POST",
+        headers: { ...authHeaders() },
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) { setMsg(msg, data.error || "Checkout failed — sign in and configure Stripe on API", "err"); return; }
+      if (data.url) window.location.href = data.url;
+    };
+
+    document.getElementById("btnLoad").onclick = async () => {
+      const msg = document.getElementById("apiMsg");
+      const out = document.getElementById("out");
+      setMsg(msg, "Loading…", "");
+      const res = await fetch(base + API_DATA_PATH + "?per_page=20", { headers: { ...authHeaders() } });
+      const text = await res.text();
+      if (res.status === 401) {
+        setMsg(msg, "Sign in required.", "err");
+        out.textContent = text;
+        return;
+      }
+      if (res.status === 402) {
+        setMsg(msg, "Active subscription required — use Subscribe, then try again.", "err");
+        try { out.textContent = JSON.stringify(JSON.parse(text), null, 2); } catch { out.textContent = text; }
+        return;
+      }
+      if (!res.ok) {
+        setMsg(msg, "Error " + res.status, "err");
+        out.textContent = text;
+        return;
+      }
+      setMsg(msg, "OK", "ok");
+      try { out.textContent = JSON.stringify(JSON.parse(text), null, 2); } catch { out.textContent = text; }
+    };
+
+    refreshPricing();
+  </script>
+</body>
+</html>

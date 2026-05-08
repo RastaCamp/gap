@@ -7,5 +7,5 @@ for (const dir of ["data", "data/snapshots", "data/logs"]) {
   mkdirSync(join(process.cwd(), dir), { recursive: true });
 }
 
-initDb();
+await initDb();
 console.log("[init] Database ready at data/foodsafe.db");

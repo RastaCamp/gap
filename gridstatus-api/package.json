@@ -8,6 +8,6 @@
     "ingest": "bun run src/ingestion/worker.ts",
     "db:init": "bun run src/server/db/init.ts"
   },
-  "dependencies": { "zod": "^3.22.4" },
+  "dependencies": { "gap-common": "file:../common", "stripe": "^17.4.0", "zod": "^3.22.4" },
   "devDependencies": { "@types/bun": "latest" }
 }

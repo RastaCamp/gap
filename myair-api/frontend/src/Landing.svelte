@@ -1,7 +1,9 @@
 <script>
   let info = {}; let stats = {};
   fetch("/api").then((r) => r.json()).then((d) => (info = d)).catch(() => {});
-  fetch("/api/stats").then((r) => r.json()).then((d) => (stats = d)).catch(() => {});
+  const _sh = {};
+  if (typeof localStorage !== "undefined") { const t = localStorage.getItem("token"); if (t) _sh.Authorization = "Bearer " + t; }
+  fetch("/api/stats", { headers: _sh }).then((r) => (r.ok ? r.json() : {})).then((d) => (stats = d)).catch(() => {});
 </script>
 <header class="header">
   <h1>{info.name ?? "MyAir Local API"}</h1>
@@ -12,7 +14,7 @@
     <a href="#/pricing">Pricing</a>
     <a href="#/docs">API Docs</a>
     <a href="#/contact">Contact</a>
-    <a href="#/login">Login</a>
+    <a href="#/login">Login</a> <a href="#/register">Register</a>
     <a href="#/login?admin=1" class="admin-link">Admin</a>
     <a href="#/login" class="debug">Debug</a>
   </nav>

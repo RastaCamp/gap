@@ -128,14 +128,35 @@ CREATE INDEX IF NOT EXISTS idx_snapshots_fetched ON snapshots(fetched_at DESC);
 
 -- ─── Users & auth (expandable) ───────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS users (
-  id            TEXT PRIMARY KEY,
-  email         TEXT NOT NULL UNIQUE,
-  name          TEXT NOT NULL DEFAULT '',
-  region        TEXT NOT NULL DEFAULT '',
-  role          TEXT NOT NULL DEFAULT 'user' CHECK(role IN ('user','admin','debug')),
-  usage_limit   INTEGER NOT NULL DEFAULT 10000,
-  created_at    TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at    TEXT NOT NULL DEFAULT (datetime('now'))
+  id                      TEXT PRIMARY KEY,
+  email                   TEXT NOT NULL UNIQUE,
+  name                    TEXT NOT NULL DEFAULT '',
+  region                  TEXT NOT NULL DEFAULT '',
+  role                    TEXT NOT NULL DEFAULT 'user' CHECK(role IN ('user','admin','debug')),
+  usage_limit             INTEGER NOT NULL DEFAULT 10000,
+  password_hash           TEXT,
+  stripe_customer_id      TEXT,
+  stripe_subscription_id  TEXT,
+  billing_status          TEXT NOT NULL DEFAULT 'none',
+  created_at              TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at              TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS sessions (
+  id          TEXT PRIMARY KEY,
+  user_id     TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  token_hash  TEXT NOT NULL UNIQUE,
+  expires_at  TEXT NOT NULL,
+  created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_expires ON sessions(expires_at);
+CREATE TABLE IF NOT EXISTS email_campaigns (
+  id              TEXT PRIMARY KEY,
+  subject         TEXT NOT NULL,
+  body            TEXT NOT NULL,
+  sent_by_user_id TEXT NOT NULL REFERENCES users(id),
+  recipient_count INTEGER NOT NULL DEFAULT 0,
+  created_at      TEXT NOT NULL DEFAULT (datetime('now'))
 );
 CREATE TABLE IF NOT EXISTS api_usage (
   id            TEXT PRIMARY KEY,

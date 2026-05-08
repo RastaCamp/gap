@@ -58,6 +58,7 @@ Each project folder has:
 
 ```bash
 cd foodsafe-api
+cp .env.example .env
 bun install
 bun run db:init
 bun run dev          # API on port 3001
@@ -118,6 +119,7 @@ See `api-registry/README.md` for the folder ↔ registry mapping and usage notes
 ## Environment
 
 Per project: optional `.env` with `PORT`, `ADMIN_TOKEN`, `DB_PATH`, and any API keys below.
+Each API project includes a starter `.env.example`; copy it to `.env` before running.
 
 | Project | Env vars (optional) | Notes |
 |---------|----------------------|--------|
@@ -132,6 +134,11 @@ Per project: optional `.env` with `PORT`, `ADMIN_TOKEN`, `DB_PATH`, and any API 
 | neighborhoodscore-api | `AIRNOW_API_KEY`, `AIRNOW_ZIP` | Baltimore, CDC PLACES key-free; CityProtect/NSOPW stubs; use link-out for registries |
 
 **Any project:** `DISABLED_SOURCES` — comma-separated source ids to skip when running `ingest all` (e.g. `DISABLED_SOURCES=ewg,cityprotect,nsopw`).
+
+## Runtime data and git hygiene
+
+- SQLite runtime artifacts are intentionally ignored (`**/data/*.db`, `*.db-shm`, `*.db-wal`).
+- Keep `data/` local for development and do not commit generated snapshots/logs.
 
 Full list and stub details: **`IMPLEMENTATION_STATUS.md`**.
 

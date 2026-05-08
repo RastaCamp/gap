@@ -1,8 +1,9 @@
 import { initDb } from "./db/client";
 import { handleReadings, handleStats } from "./routes/readings";
 import { handleSync, handleJobs, handleJobDetail, handleAdminStatus } from "./routes/admin";
-import { handleLogin, handleMe, handleDebugLogin, isAdmin } from "./routes/auth";
-import { handleAdminUsers, handleAdminAnalytics } from "./routes/users";
+import { handleLogin, handleMe, handleDebugLogin, handleRegister, handleLogout, handleChangePassword, isAdmin, gatePaidDataApi } from "./routes/auth";
+import { handleAdminUsers, handleAdminAnalytics, handleAdminCreateUser, handleAdminEmailBlast } from "./routes/users";
+import { handleCreateCheckout, handleStripeWebhook, handlePublicPricing } from "./routes/billing";
 import { mkdirSync } from "fs";
 import { join } from "path";
 
@@ -10,7 +11,7 @@ for (const dir of ["data", "data/snapshots", "data/logs"]) {
   mkdirSync(join(process.cwd(), dir), { recursive: true });
 }
 
-initDb();
+await initDb();
 
 const PORT = parseInt(process.env.PORT ?? "3002");
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN ?? "dev-token-change-me";
@@ -56,13 +57,27 @@ const server = Bun.serve({
       });
     }
 
-    if (method === "GET" && path === "/api/readings") return handleReadings(req);
-    if (method === "GET" && path === "/api/stats") return handleStats(req);
+    if (method === "GET" && path === "/api/pricing") return handlePublicPricing(req);
+    if (method === "GET" && path === "/api/readings") {
+      const g = gatePaidDataApi(req);
+      if (g) return g;
+      return handleReadings(req);
+    }
+    if (method === "GET" && path === "/api/stats") {
+      const g = gatePaidDataApi(req);
+      if (g) return g;
+      return handleStats(req);
+    }
     if (method === "GET" && path === "/api/health") return json({ status: "ok", timestamp: new Date().toISOString() });
 
+    if (method === "POST" && path === "/api/webhooks/stripe") return handleStripeWebhook(req);
     if (method === "POST" && path === "/api/login") return handleLogin(req);
+    if (method === "POST" && path === "/api/register") return handleRegister(req);
+    if (method === "POST" && path === "/api/logout") return handleLogout(req);
     if (method === "POST" && path === "/api/debug-login") return handleDebugLogin(req);
     if (method === "GET" && path === "/api/users/me") return handleMe(req);
+    if (method === "POST" && path === "/api/users/change-password") return handleChangePassword(req);
+    if (method === "POST" && path === "/api/billing/checkout") return handleCreateCheckout(req);
 
     if (path.startsWith("/api/admin")) {
       if (!isAdminAuthorized(req) && !isAdmin(req)) return unauthorized();
@@ -71,7 +86,9 @@ const server = Bun.serve({
       if (method === "GET" && path.startsWith("/api/admin/jobs/")) return handleJobDetail(req, path.replace("/api/admin/jobs/", ""));
       if (method === "GET" && path === "/api/admin/status") return handleAdminStatus(req);
       if (method === "GET" && path === "/api/admin/users") return handleAdminUsers(req);
+      if (method === "POST" && path === "/api/admin/users") return handleAdminCreateUser(req);
       if (method === "GET" && path === "/api/admin/analytics") return handleAdminAnalytics(req);
+      if (method === "POST" && path === "/api/admin/email-blast") return handleAdminEmailBlast(req);
       return notFound();
     }
 

@@ -10,6 +10,8 @@
     "db:migrate:pg": "bun run src/server/db/migrate-to-pg.ts"
   },
   "dependencies": {
+    "gap-common": "file:../common",
+    "stripe": "^17.4.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {

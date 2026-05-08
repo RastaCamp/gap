@@ -1,5 +1,5 @@
 import type { NormalizedRecord, SourceName } from "../shared/types";
-import { writeFileSync, readFileSync, existsSync, mkdirSync } from "fs";
+import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync } from "fs";
 import { join } from "path";
 
 const SNAPSHOTS_DIR = join(process.cwd(), "data", "snapshots");
@@ -33,8 +33,8 @@ export function saveSnapshot(source: SourceName, records: NormalizedRecord[]): s
 
 export function loadLatestSnapshot(source: SourceName): Snapshot | null {
   try {
-    // Find most recent snapshot file for this source
-    const { readdirSync } = await import("fs");
+    if (!existsSync(SNAPSHOTS_DIR)) return null;
+
     const files = readdirSync(SNAPSHOTS_DIR)
       .filter(f => f.startsWith(`${source}-`) && f.endsWith(".json"))
       .sort()

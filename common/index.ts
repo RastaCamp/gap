@@ -10,3 +10,5 @@ export * from "./scoring";
 export * from "./geofilter";
 export * from "./cross_source";
 export * from "./mappers";
+export * from "./auth";
+export * from "./billing";

@@ -1,7 +1,7 @@
-<script> let info = {}; fetch("/api").then((r) => r.json()).then((d) => (info = d)).catch(() => {}); </script>
+<script> let info = {}; let pricing = { monthly_price_usd: 20, require_paid_api: true }; fetch("/api").then((r) => r.json()).then((d) => (info = d)).catch(() => {}); fetch("/api/pricing").then((r) => r.json()).then((d) => { pricing = { ...pricing, ...d }; }).catch(() => {}); </script>
 <div class="page">
   <h1>Pricing</h1>
-  <p class="hero">Simple, predictable plans for the {info.name ?? "FoodSafe"} API and for the managed service. Start free, scale as you grow.</p>
+  <p class="hero">Simple, predictable plans for the {info.name ?? "FoodSafe"} API and for the managed service. <strong>API data access</strong> is <strong>{"$"}{pricing.monthly_price_usd}/month</strong> after signup (change anytime via server env <code>MONTHLY_PRICE_USD</code>). Marketing tiers below are illustrative — billing follows the subscription checkout.</p>
 
   <section>
     <h2>API plans</h2>

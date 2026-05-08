@@ -1,6 +1,7 @@
 import { Database } from "bun:sqlite";
 import { readFileSync } from "fs";
 import { join } from "path";
+import { applyAuthSchemaMigrations, hashPassword, hashSessionToken, newSessionToken } from "gap-common";
 import type { Reading, SyncJob, NormalizedRecord } from "../../shared/types";
 
 const DB_PATH = process.env.DB_PATH ?? join(process.cwd(), "data", "gridstatus.db");
@@ -16,8 +17,11 @@ export function getDb(): Database {
   return _db;
 }
 
-export function initDb(): void {
-  getDb().exec(readFileSync(join(import.meta.dir, "schema.sql"), "utf-8"));
+export async function initDb(): Promise<void> {
+  const db = getDb();
+  db.exec(readFileSync(join(import.meta.dir, "schema.sql"), "utf-8"));
+  applyAuthSchemaMigrations(db);
+  await seedDefaultAdminIfConfigured();
   console.log("[db] Schema applied ✓");
 }
 
@@ -92,20 +96,174 @@ export function getStats() {
   const lastJob = db.query<SyncJob, []>("SELECT * FROM sync_jobs WHERE status = 'success' ORDER BY finished_at DESC LIMIT 1").get();
   return { total_readings: total, by_source: Object.fromEntries(bySource.map(r => [r.source, r.count])), last_successful_sync: lastJob?.finished_at ?? null };
 }
-export type UserRow = { id: string; email: string; name: string; region: string; role: string; usage_limit: number; created_at: string; updated_at: string };
-export function listUsers(): UserRow[] { return getDb().query<UserRow, []>("SELECT * FROM users ORDER BY created_at DESC").all(); }
-export function getUserById(id: string): UserRow | null { return getDb().query<UserRow, string>("SELECT * FROM users WHERE id = ?").get(id) ?? null; }
-export function getUserByEmail(email: string): UserRow | null { return getDb().query<UserRow, string>("SELECT * FROM users WHERE email = ?").get(email) ?? null; }
-export function createUser(record: { email: string; name?: string; region?: string; role?: string; usage_limit?: number }): UserRow {
+// ─── Users & usage (expandable) ───────────────────────────────────────────────
+
+export type UserRow = {
+  id: string;
+  email: string;
+  name: string;
+  region: string;
+  role: string;
+  usage_limit: number;
+  password_hash: string | null;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
+  billing_status: string;
+  created_at: string;
+  updated_at: string;
+};
+
+async function seedDefaultAdminIfConfigured(): Promise<void> {
+  const password = process.env.DEFAULT_ADMIN_PASSWORD?.trim();
+  if (!password) return;
+  const email = (process.env.DEFAULT_ADMIN_EMAIL ?? "admin@local").trim().toLowerCase();
+  const ph = await hashPassword(password);
+  let user = getUserByEmail(email);
+  if (!user) {
+    const id = crypto.randomUUID();
+    getDb().run(
+      `INSERT INTO users (id, email, name, region, role, usage_limit, password_hash, billing_status)
+       VALUES (?, ?, ?, ?, 'admin', 10000, ?, 'none')`,
+      id, email, "Admin", "", ph
+    );
+    user = getUserById(id)!;
+    console.log("[db] Default admin created:", email);
+    return;
+  }
+  if (user.role !== "admin") {
+    getDb().run("UPDATE users SET role = 'admin', updated_at = datetime('now') WHERE id = ?", user.id);
+  }
+  if (!user.password_hash) {
+    getDb().run("UPDATE users SET password_hash = ?, updated_at = datetime('now') WHERE id = ?", ph, user.id);
+    console.log("[db] Default admin password set:", email);
+  }
+}
+
+export function listUsers(): UserRow[] {
+  return getDb().query<UserRow, []>("SELECT * FROM users ORDER BY created_at DESC").all();
+}
+
+export function getUserById(id: string): UserRow | null {
+  return getDb().query<UserRow, string>("SELECT * FROM users WHERE id = ?").get(id) ?? null;
+}
+
+export function getUserByEmail(email: string): UserRow | null {
+  return getDb().query<UserRow, string>("SELECT * FROM users WHERE email = ?").get(email.trim().toLowerCase()) ?? null;
+}
+
+export function createUser(record: {
+  email: string;
+  name?: string;
+  region?: string;
+  role?: string;
+  usage_limit?: number;
+  password_hash?: string | null;
+}): UserRow {
   const id = crypto.randomUUID();
-  getDb().run("INSERT INTO users (id, email, name, region, role, usage_limit) VALUES (?, ?, ?, ?, ?, ?)", id, record.email, record.name ?? "", record.region ?? "", record.role ?? "user", record.usage_limit ?? 10000);
+  getDb().run(
+    `INSERT INTO users (id, email, name, region, role, usage_limit, password_hash, billing_status)
+     VALUES (?, ?, ?, ?, ?, ?, ?, 'none')`,
+    id,
+    record.email.trim().toLowerCase(),
+    record.name ?? "",
+    record.region ?? "",
+    record.role ?? "user",
+    record.usage_limit ?? 10000,
+    record.password_hash ?? null
+  );
   return getUserById(id)!;
 }
-export function getUsageForUser(userId: string): { period_start: string; request_count: number }[] { return getDb().query<{ period_start: string; request_count: number }, string>("SELECT period_start, request_count FROM api_usage WHERE user_id = ? ORDER BY period_start DESC LIMIT 12").all(userId); }
-export function recordUsage(userId: string, periodStart: string): void { const id = crypto.randomUUID(); getDb().run("INSERT INTO api_usage (id, user_id, period_start, request_count) VALUES (?, ?, ?, 1) ON CONFLICT(user_id, period_start) DO UPDATE SET request_count = request_count + 1", id, userId, periodStart); }
+
+export function updateUserPassword(userId: string, passwordHash: string): void {
+  getDb().run("UPDATE users SET password_hash = ?, updated_at = datetime('now') WHERE id = ?", passwordHash, userId);
+}
+
+export function updateUserStripe(
+  userId: string,
+  patch: { stripe_customer_id?: string | null; stripe_subscription_id?: string | null; billing_status?: string }
+): void {
+  const row = getUserById(userId);
+  if (!row) return;
+  getDb().run(
+    `UPDATE users SET
+      stripe_customer_id = COALESCE(?, stripe_customer_id),
+      stripe_subscription_id = COALESCE(?, stripe_subscription_id),
+      billing_status = COALESCE(?, billing_status),
+      updated_at = datetime('now')
+     WHERE id = ?`,
+    patch.stripe_customer_id ?? null,
+    patch.stripe_subscription_id ?? null,
+    patch.billing_status ?? null,
+    userId
+  );
+}
+
+export function pruneExpiredSessions(): void {
+  getDb().run("DELETE FROM sessions WHERE datetime(expires_at) <= datetime('now')");
+}
+
+export function createSession(userId: string, expiresAtIso: string): string {
+  pruneExpiredSessions();
+  const token = newSessionToken();
+  const th = hashSessionToken(token);
+  getDb().run(
+    "INSERT INTO sessions (id, user_id, token_hash, expires_at) VALUES (?, ?, ?, ?)",
+    crypto.randomUUID(),
+    userId,
+    th,
+    expiresAtIso
+  );
+  return token;
+}
+
+export function resolveSessionUserId(token: string): string | null {
+  if (!token) return null;
+  pruneExpiredSessions();
+  const th = hashSessionToken(token);
+  const row = getDb().query<{ user_id: string }, string>(
+    "SELECT user_id FROM sessions WHERE token_hash = ? AND datetime(expires_at) > datetime('now')"
+  ).get(th);
+  return row?.user_id ?? null;
+}
+
+export function deleteSessionByToken(token: string): void {
+  const th = hashSessionToken(token);
+  getDb().run("DELETE FROM sessions WHERE token_hash = ?", th);
+}
+
+export function recordEmailCampaign(subject: string, body: string, sentByUserId: string, recipientCount: number): void {
+  getDb().run(
+    "INSERT INTO email_campaigns (id, subject, body, sent_by_user_id, recipient_count) VALUES (?, ?, ?, ?, ?)",
+    crypto.randomUUID(),
+    subject,
+    body,
+    sentByUserId,
+    recipientCount
+  );
+}
+
+export function getUsageForUser(userId: string): { period_start: string; request_count: number }[] {
+  return getDb().query<{ period_start: string; request_count: number }, string>(
+    "SELECT period_start, request_count FROM api_usage WHERE user_id = ? ORDER BY period_start DESC LIMIT 12"
+  ).all(userId);
+}
+
+export function recordUsage(userId: string, periodStart: string): void {
+  const db = getDb();
+  const id = crypto.randomUUID();
+  db.run(
+    "INSERT INTO api_usage (id, user_id, period_start, request_count) VALUES (?, ?, ?, 1) ON CONFLICT(user_id, period_start) DO UPDATE SET request_count = request_count + 1",
+    id, userId, periodStart
+  );
+}
+
 export function getAdminAnalytics(): { total_users: number; total_requests_today: number; by_role: Record<string, number> } {
-  const db = getDb(); const totalUsers = db.query<{ count: number }, []>("SELECT COUNT(*) as count FROM users").get()?.count ?? 0;
-  const period = new Date().toISOString().slice(0, 10); const totalRequests = db.query<{ total: number }, string>("SELECT COALESCE(SUM(request_count), 0) as total FROM api_usage WHERE period_start = ?").get(period)?.total ?? 0;
+  const db = getDb();
+  const totalUsers = db.query<{ count: number }, []>("SELECT COUNT(*) as count FROM users").get()?.count ?? 0;
+  const period = new Date().toISOString().slice(0, 10);
+  const totalRequests = db.query<{ total: number }, string>(
+    "SELECT COALESCE(SUM(request_count), 0) as total FROM api_usage WHERE period_start = ?"
+  ).get(period)?.total ?? 0;
   const byRole = db.query<{ role: string; count: number }, []>("SELECT role, COUNT(*) as count FROM users GROUP BY role").all();
   return { total_users: totalUsers, total_requests_today: totalRequests, by_role: Object.fromEntries(byRole.map(r => [r.role, r.count])) };
 }
