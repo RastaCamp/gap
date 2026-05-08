@@ -1,0 +1,19 @@
+# Svelte/Vite static site + nginx reverse-proxy to API container
+ARG BUN_IMAGE=oven/bun:1.2-alpine
+FROM ${BUN_IMAGE} AS build
+
+ARG API_SUBDIR=foodsafe-api
+WORKDIR /build
+
+COPY ${API_SUBDIR}/frontend/ /build/
+RUN bun install --frozen-lockfile 2>/dev/null || bun install \
+  && bun run build
+
+FROM nginx:1.27-alpine
+
+COPY --from=build /build/dist /usr/share/nginx/html
+COPY docker/nginx/default.conf.template /etc/nginx/templates/default.conf.template
+
+ENV UPSTREAM_API_HOST=foodsafe-api
+ENV UPSTREAM_API_PORT=3001
+EXPOSE 80

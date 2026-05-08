@@ -1,0 +1,18 @@
+# Build from repo root: API_SUBDIR=foodsafe-api (folder name under gap/)
+ARG BUN_IMAGE=oven/bun:1.2-alpine
+FROM ${BUN_IMAGE}
+
+ARG API_SUBDIR=foodsafe-api
+WORKDIR /app/${API_SUBDIR}
+
+COPY common /app/common
+COPY ${API_SUBDIR} /app/${API_SUBDIR}
+
+ENV NODE_ENV=production
+# PORT set per service in docker-compose
+EXPOSE 3000
+
+RUN mkdir -p data/snapshots data/logs \
+  && bun install --frozen-lockfile 2>/dev/null || bun install
+
+CMD ["sh", "-c", "bun run src/server/index.ts"]

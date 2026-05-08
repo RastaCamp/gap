@@ -1,0 +1,292 @@
+# GAP stack — builds from repo root so `gap-common` (file:../common) resolves.
+# Prerequisite: Docker engine running (e.g. start Docker Desktop on Windows).
+#
+# One product:
+#   docker compose up --build foodsafe-api foodsafe-web
+#
+# Add env per API by uncommenting env_file on each *-api service.
+# Full stack (9 APIs + 9 UIs + static HTML hub on :8090):
+#   docker compose up --build
+
+name: gap
+
+services:
+  foodsafe-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+      args:
+        API_SUBDIR: foodsafe-api
+    environment:
+      PORT: "3001"
+    ports:
+      - "3001:3001"
+    volumes:
+      - foodsafe_api_data:/app/foodsafe-api/data
+    restart: unless-stopped
+
+  foodsafe-web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        API_SUBDIR: foodsafe-api
+    environment:
+      UPSTREAM_API_HOST: foodsafe-api
+      UPSTREAM_API_PORT: "3001"
+    ports:
+      - "5173:80"
+    depends_on:
+      - foodsafe-api
+    restart: unless-stopped
+
+  myair-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+      args:
+        API_SUBDIR: myair-api
+    environment:
+      PORT: "3002"
+    ports:
+      - "3002:3002"
+    volumes:
+      - myair_api_data:/app/myair-api/data
+    restart: unless-stopped
+
+  myair-web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        API_SUBDIR: myair-api
+    environment:
+      UPSTREAM_API_HOST: myair-api
+      UPSTREAM_API_PORT: "3002"
+    ports:
+      - "5174:80"
+    depends_on:
+      - myair-api
+    restart: unless-stopped
+
+  groundtruth-seismic-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+      args:
+        API_SUBDIR: groundtruth-seismic-api
+    environment:
+      PORT: "3003"
+    ports:
+      - "3003:3003"
+    volumes:
+      - groundtruth_seismic_api_data:/app/groundtruth-seismic-api/data
+    restart: unless-stopped
+
+  groundtruth-web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        API_SUBDIR: groundtruth-seismic-api
+    environment:
+      UPSTREAM_API_HOST: groundtruth-seismic-api
+      UPSTREAM_API_PORT: "3003"
+    ports:
+      - "5175:80"
+    depends_on:
+      - groundtruth-seismic-api
+    restart: unless-stopped
+
+  skywatch-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+      args:
+        API_SUBDIR: skywatch-api
+    environment:
+      PORT: "3004"
+    ports:
+      - "3004:3004"
+    volumes:
+      - skywatch_api_data:/app/skywatch-api/data
+    restart: unless-stopped
+
+  skywatch-web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        API_SUBDIR: skywatch-api
+    environment:
+      UPSTREAM_API_HOST: skywatch-api
+      UPSTREAM_API_PORT: "3004"
+    ports:
+      - "5176:80"
+    depends_on:
+      - skywatch-api
+    restart: unless-stopped
+
+  watersafe-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+      args:
+        API_SUBDIR: watersafe-api
+    environment:
+      PORT: "3005"
+    ports:
+      - "3005:3005"
+    volumes:
+      - watersafe_api_data:/app/watersafe-api/data
+    restart: unless-stopped
+
+  watersafe-web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        API_SUBDIR: watersafe-api
+    environment:
+      UPSTREAM_API_HOST: watersafe-api
+      UPSTREAM_API_PORT: "3005"
+    ports:
+      - "5177:80"
+    depends_on:
+      - watersafe-api
+    restart: unless-stopped
+
+  gridstatus-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+      args:
+        API_SUBDIR: gridstatus-api
+    environment:
+      PORT: "3006"
+    ports:
+      - "3006:3006"
+    volumes:
+      - gridstatus_api_data:/app/gridstatus-api/data
+    restart: unless-stopped
+
+  gridstatus-web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        API_SUBDIR: gridstatus-api
+    environment:
+      UPSTREAM_API_HOST: gridstatus-api
+      UPSTREAM_API_PORT: "3006"
+    ports:
+      - "5178:80"
+    depends_on:
+      - gridstatus-api
+    restart: unless-stopped
+
+  newssignal-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+      args:
+        API_SUBDIR: newssignal-api
+    environment:
+      PORT: "3007"
+    ports:
+      - "3007:3007"
+    volumes:
+      - newssignal_api_data:/app/newssignal-api/data
+    restart: unless-stopped
+
+  newssignal-web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        API_SUBDIR: newssignal-api
+    environment:
+      UPSTREAM_API_HOST: newssignal-api
+      UPSTREAM_API_PORT: "3007"
+    ports:
+      - "5179:80"
+    depends_on:
+      - newssignal-api
+    restart: unless-stopped
+
+  biosurge-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+      args:
+        API_SUBDIR: biosurge-api
+    environment:
+      PORT: "3008"
+    ports:
+      - "3008:3008"
+    volumes:
+      - biosurge_api_data:/app/biosurge-api/data
+    restart: unless-stopped
+
+  biosurge-web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        API_SUBDIR: biosurge-api
+    environment:
+      UPSTREAM_API_HOST: biosurge-api
+      UPSTREAM_API_PORT: "3008"
+    ports:
+      - "5180:80"
+    depends_on:
+      - biosurge-api
+    restart: unless-stopped
+
+  neighborhoodscore-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+      args:
+        API_SUBDIR: neighborhoodscore-api
+    environment:
+      PORT: "3009"
+    ports:
+      - "3009:3009"
+    volumes:
+      - neighborhoodscore_api_data:/app/neighborhoodscore-api/data
+    restart: unless-stopped
+
+  neighborhoodscore-web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        API_SUBDIR: neighborhoodscore-api
+    environment:
+      UPSTREAM_API_HOST: neighborhoodscore-api
+      UPSTREAM_API_PORT: "3009"
+    ports:
+      - "5181:80"
+    depends_on:
+      - neighborhoodscore-api
+    restart: unless-stopped
+
+  static-sites:
+    image: nginx:1.27-alpine
+    ports:
+      - "8090:80"
+    volumes:
+      - ./static-sites:/usr/share/nginx/html:ro
+    restart: unless-stopped
+
+volumes:
+  foodsafe_api_data:
+  myair_api_data:
+  groundtruth_seismic_api_data:
+  skywatch_api_data:
+  watersafe_api_data:
+  gridstatus_api_data:
+  newssignal_api_data:
+  biosurge_api_data:
+  neighborhoodscore_api_data:

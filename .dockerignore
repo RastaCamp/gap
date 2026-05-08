@@ -1,0 +1,11 @@
+.git
+.github
+**/node_modules
+**/.svelte-kit
+**/dist
+**/data/*.db
+**/data/*.db-shm
+**/data/*.db-wal
+**/data/snapshots
+**/data/logs
+**/.env
