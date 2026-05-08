@@ -1,0 +1,37 @@
+# Cloudflare Tunnel ingress for GAP Svelte UIs (one hostname per product).
+# Each line points at the *host* port published by docker-compose for *-web (nginx + /api proxy).
+#
+# Setup:
+#   1) cloudflared tunnel create gap-rastacamp
+#   2) Note the tunnel UUID and path to credentials JSON (see cloudflare/README.md)
+#   3) Copy this file to config.yml, replace TUNNEL_UUID and CREDENTIALS path
+#   4) cloudflared tunnel route dns gap-rastacamp <hostname>   (once per hostname)
+#   5) cloudflared tunnel --config config.yml run
+#
+# If you use docker/ports-alt.env, change every :517x below to :1517x (and :8090 -> :18090 for static).
+
+tunnel: TUNNEL_UUID
+credentials-file: REPLACE_ME/.cloudflared/TUNNEL_UUID.json
+
+ingress:
+  - hostname: foodsafe.rastacamp.com
+    service: http://127.0.0.1:5173
+  - hostname: myair.rastacamp.com
+    service: http://127.0.0.1:5174
+  - hostname: groundtruth.rastacamp.com
+    service: http://127.0.0.1:5175
+  - hostname: skywatch.rastacamp.com
+    service: http://127.0.0.1:5176
+  - hostname: watersafe.rastacamp.com
+    service: http://127.0.0.1:5177
+  - hostname: gridstatus.rastacamp.com
+    service: http://127.0.0.1:5178
+  - hostname: newssignal.rastacamp.com
+    service: http://127.0.0.1:5179
+  - hostname: biosurge.rastacamp.com
+    service: http://127.0.0.1:5180
+  - hostname: neighborhoodscore.rastacamp.com
+    service: http://127.0.0.1:5181
+  - hostname: static.rastacamp.com
+    service: http://127.0.0.1:8090
+  - service: http_status:404
