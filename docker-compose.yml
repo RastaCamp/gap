@@ -7,6 +7,9 @@
 # Add env per API by uncommenting env_file on each *-api service.
 # Full stack (9 APIs + 9 UIs + static HTML hub on :8090):
 #   docker compose up --build
+#
+# Host port clashes (e.g. local Bun already on 3001): use alternate publish ports:
+#   docker compose --env-file docker/ports-alt.env up -d foodsafe-api foodsafe-web
 
 name: gap
 
@@ -20,7 +23,7 @@ services:
     environment:
       PORT: "3001"
     ports:
-      - "3001:3001"
+      - "${GAP_PORT_FOODSAFE_API:-3001}:3001"
     volumes:
       - foodsafe_api_data:/app/foodsafe-api/data
     restart: unless-stopped
@@ -35,7 +38,7 @@ services:
       UPSTREAM_API_HOST: foodsafe-api
       UPSTREAM_API_PORT: "3001"
     ports:
-      - "5173:80"
+      - "${GAP_PORT_FOODSAFE_WEB:-5173}:80"
     depends_on:
       - foodsafe-api
     restart: unless-stopped
@@ -49,7 +52,7 @@ services:
     environment:
       PORT: "3002"
     ports:
-      - "3002:3002"
+      - "${GAP_PORT_MYAIR_API:-3002}:3002"
     volumes:
       - myair_api_data:/app/myair-api/data
     restart: unless-stopped
@@ -64,7 +67,7 @@ services:
       UPSTREAM_API_HOST: myair-api
       UPSTREAM_API_PORT: "3002"
     ports:
-      - "5174:80"
+      - "${GAP_PORT_MYAIR_WEB:-5174}:80"
     depends_on:
       - myair-api
     restart: unless-stopped
@@ -78,7 +81,7 @@ services:
     environment:
       PORT: "3003"
     ports:
-      - "3003:3003"
+      - "${GAP_PORT_GROUNDTRUTH_API:-3003}:3003"
     volumes:
       - groundtruth_seismic_api_data:/app/groundtruth-seismic-api/data
     restart: unless-stopped
@@ -93,7 +96,7 @@ services:
       UPSTREAM_API_HOST: groundtruth-seismic-api
       UPSTREAM_API_PORT: "3003"
     ports:
-      - "5175:80"
+      - "${GAP_PORT_GROUNDTRUTH_WEB:-5175}:80"
     depends_on:
       - groundtruth-seismic-api
     restart: unless-stopped
@@ -107,7 +110,7 @@ services:
     environment:
       PORT: "3004"
     ports:
-      - "3004:3004"
+      - "${GAP_PORT_SKYWATCH_API:-3004}:3004"
     volumes:
       - skywatch_api_data:/app/skywatch-api/data
     restart: unless-stopped
@@ -122,7 +125,7 @@ services:
       UPSTREAM_API_HOST: skywatch-api
       UPSTREAM_API_PORT: "3004"
     ports:
-      - "5176:80"
+      - "${GAP_PORT_SKYWATCH_WEB:-5176}:80"
     depends_on:
       - skywatch-api
     restart: unless-stopped
@@ -136,7 +139,7 @@ services:
     environment:
       PORT: "3005"
     ports:
-      - "3005:3005"
+      - "${GAP_PORT_WATERSAFE_API:-3005}:3005"
     volumes:
       - watersafe_api_data:/app/watersafe-api/data
     restart: unless-stopped
@@ -151,7 +154,7 @@ services:
       UPSTREAM_API_HOST: watersafe-api
       UPSTREAM_API_PORT: "3005"
     ports:
-      - "5177:80"
+      - "${GAP_PORT_WATERSAFE_WEB:-5177}:80"
     depends_on:
       - watersafe-api
     restart: unless-stopped
@@ -165,7 +168,7 @@ services:
     environment:
       PORT: "3006"
     ports:
-      - "3006:3006"
+      - "${GAP_PORT_GRIDSTATUS_API:-3006}:3006"
     volumes:
       - gridstatus_api_data:/app/gridstatus-api/data
     restart: unless-stopped
@@ -180,7 +183,7 @@ services:
       UPSTREAM_API_HOST: gridstatus-api
       UPSTREAM_API_PORT: "3006"
     ports:
-      - "5178:80"
+      - "${GAP_PORT_GRIDSTATUS_WEB:-5178}:80"
     depends_on:
       - gridstatus-api
     restart: unless-stopped
@@ -194,7 +197,7 @@ services:
     environment:
       PORT: "3007"
     ports:
-      - "3007:3007"
+      - "${GAP_PORT_NEWSSIGNAL_API:-3007}:3007"
     volumes:
       - newssignal_api_data:/app/newssignal-api/data
     restart: unless-stopped
@@ -209,7 +212,7 @@ services:
       UPSTREAM_API_HOST: newssignal-api
       UPSTREAM_API_PORT: "3007"
     ports:
-      - "5179:80"
+      - "${GAP_PORT_NEWSSIGNAL_WEB:-5179}:80"
     depends_on:
       - newssignal-api
     restart: unless-stopped
@@ -223,7 +226,7 @@ services:
     environment:
       PORT: "3008"
     ports:
-      - "3008:3008"
+      - "${GAP_PORT_BIOSURGE_API:-3008}:3008"
     volumes:
       - biosurge_api_data:/app/biosurge-api/data
     restart: unless-stopped
@@ -238,7 +241,7 @@ services:
       UPSTREAM_API_HOST: biosurge-api
       UPSTREAM_API_PORT: "3008"
     ports:
-      - "5180:80"
+      - "${GAP_PORT_BIOSURGE_WEB:-5180}:80"
     depends_on:
       - biosurge-api
     restart: unless-stopped
@@ -252,7 +255,7 @@ services:
     environment:
       PORT: "3009"
     ports:
-      - "3009:3009"
+      - "${GAP_PORT_NEIGHBORHOODSCORE_API:-3009}:3009"
     volumes:
       - neighborhoodscore_api_data:/app/neighborhoodscore-api/data
     restart: unless-stopped
@@ -267,7 +270,7 @@ services:
       UPSTREAM_API_HOST: neighborhoodscore-api
       UPSTREAM_API_PORT: "3009"
     ports:
-      - "5181:80"
+      - "${GAP_PORT_NEIGHBORHOODSCORE_WEB:-5181}:80"
     depends_on:
       - neighborhoodscore-api
     restart: unless-stopped
@@ -275,7 +278,7 @@ services:
   static-sites:
     image: nginx:1.27-alpine
     ports:
-      - "8090:80"
+      - "${GAP_PORT_STATIC_SITES:-8090}:80"
     volumes:
       - ./static-sites:/usr/share/nginx/html:ro
     restart: unless-stopped
