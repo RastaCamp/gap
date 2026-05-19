@@ -1,8 +1,16 @@
-# Cloudflare Tunnel — `*.rastacamp.com`
+# Cloudflare — `*.rastacamp.com`
 
-Each **product UI** gets its own hostname, for example `foodsafe.rastacamp.com`. Those names are normal DNS names under your zone **`rastacamp.com`** (one label before the zone, or several if you use something like `app.foodsafe.rastacamp.com`; this repo uses the simple `product.rastacamp.com` pattern).
+## Production (recommended): Cloudflare Pages
 
-Traffic flow: **Internet → Cloudflare edge → cloudflared on your machine → localhost port** where Docker publishes the **`*-web`** nginx container (that container already proxies `/api` to the matching API container).
+Apps run on Cloudflare’s edge — **no PC and no tunnel required**.
+
+See **[CLOUDFLARE_PAGES.md](../CLOUDFLARE_PAGES.md)** and **`deploy/myair/`** for the Pages + Functions + D1 pattern.
+
+Traffic flow: **Internet → Cloudflare Pages → Functions (API) / static assets (frontend)**
+
+## Legacy / local dev only: Cloudflare Tunnel
+
+The `config.example.yml` below is for **local Docker** exposure while developing. Do **not** use tunnel for production if the goal is uptime when your PC is off.
 
 ## What you need
 

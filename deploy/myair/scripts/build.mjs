@@ -1,0 +1,37 @@
+import { cpSync, mkdirSync, rmSync, writeFileSync, existsSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { execSync } from "node:child_process";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const gapRoot = join(root, "..", "..");
+const frontendDir = join(gapRoot, "myair-api", "frontend");
+const frontendDist = join(frontendDir, "dist");
+const outDir = join(root, "dist");
+
+console.log("[build] Building MyAir frontend…");
+execSync("npm run build", { cwd: frontendDir, stdio: "inherit" });
+
+if (!existsSync(frontendDist)) {
+  throw new Error(`Frontend dist not found at ${frontendDist}`);
+}
+
+rmSync(outDir, { recursive: true, force: true });
+mkdirSync(outDir, { recursive: true });
+cpSync(frontendDist, outDir, { recursive: true });
+
+// SPA + API routing: serve index.html for client routes; /api/* goes to Functions
+writeFileSync(
+  join(outDir, "_redirects"),
+  `/api/*  /api/:splat  200\n/*  /index.html  200\n`,
+  "utf8"
+);
+
+// Copy Pages Functions next to dist parent (wrangler expects functions/ at project root)
+const functionsSrc = join(root, "functions");
+const functionsDest = join(root, "functions");
+if (!existsSync(functionsDest)) {
+  throw new Error("functions/ missing");
+}
+
+console.log("[build] Output ready at", outDir);

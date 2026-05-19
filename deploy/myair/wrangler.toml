@@ -1,0 +1,16 @@
+name = "myair"
+compatibility_date = "2026-05-19"
+pages_build_output_dir = "dist"
+
+# Create once: wrangler d1 create myair-db
+# Then paste database_id below and run: npm run db:migrate
+[[d1_databases]]
+binding = "DB"
+database_name = "myair-db"
+database_id = "REPLACE_AFTER_D1_CREATE"
+
+[vars]
+MONTHLY_PRICE_USD = "20"
+REQUIRE_PAID_API = "true"
+ALLOW_PUBLIC_REGISTER = "true"
+STRIPE_PRODUCT_NAME = "MyAir API"
