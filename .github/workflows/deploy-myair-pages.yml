@@ -26,6 +26,7 @@ jobs:
         working-directory: deploy/myair
         run: |
           npm ci || npm install
+          npm install --prefix ../../myair-api/frontend
           npm run build
 
       - name: Apply D1 schema (remote)

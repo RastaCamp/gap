@@ -9,7 +9,10 @@ const frontendDir = join(gapRoot, "myair-api", "frontend");
 const frontendDist = join(frontendDir, "dist");
 const outDir = join(root, "dist");
 
-console.log("[build] Building MyAir frontend…");
+console.log("[build] Installing & building MyAir frontend…");
+if (!existsSync(join(frontendDir, "node_modules"))) {
+  execSync("npm install", { cwd: frontendDir, stdio: "inherit" });
+}
 execSync("npm run build", { cwd: frontendDir, stdio: "inherit" });
 
 if (!existsSync(frontendDist)) {
