@@ -1,13 +1,13 @@
-name = "myair"
+# Leerie account (0f42c247e489dce80771116c30c57c3e) — see deploy/LEERIE_ACCOUNT_SETUP.md
+name = "rastacamp-myair"
 compatibility_date = "2026-05-19"
 pages_build_output_dir = "dist"
 
-# Create once: wrangler d1 create myair-db
-# Then paste database_id below and run: npm run db:migrate
+# On Leerie account: wrangler d1 create myair-db → paste id below → npm run db:migrate
 [[d1_databases]]
 binding = "DB"
 database_name = "myair-db"
-database_id = "c7321595-d99f-43ce-b261-bc4d8384179e"
+database_id = "REPLACE_ON_LEERIE_ACCOUNT"
 
 [vars]
 MONTHLY_PRICE_USD = "20"
