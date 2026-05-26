@@ -2,26 +2,33 @@
 
 **Rule:** Production apps on **Cloudflare Pages / Workers / D1 / KV / R2** — not your PC. **Tunnel/Docker** = local dev or dedicated server only.
 
-**Foundation rule:** `rastacamp.com` zone, Pages projects, DNS, and deployment tokens must all live on **one Cloudflare account** — **Leerie.a.simpson@gmail.com** (`0f42c247e489dce80771116c30c57c3e`).
+**Ideal:** Zone + Pages + DNS + token on **one account** (Leerie). See [deploy/LEERIE_ACCOUNT_SETUP.md](deploy/LEERIE_ACCOUNT_SETUP.md).
 
-Cross-account Pages + zone caused `myair.rastacamp.com` to show **Server Not Found** even when Pages API reported “active” (no stable public DNS).
+**Current (working 2026-05-26):** Pages on Djudo82, zone on Leerie — works only if you:
+1. Add custom domain in **Workers & Pages → Custom domains** first
+2. Then add **proxied CNAME** in `rastacamp.com` DNS → `myair.pages.dev` / `rep-battle.pages.dev`
 
-→ **Migration guide:** [deploy/LEERIE_ACCOUNT_SETUP.md](deploy/LEERIE_ACCOUNT_SETUP.md)
+Never add CNAME before Pages custom domain, and never delete the CNAME while the custom domain is still attached.
 
 ---
 
-## Current state (2026-05-23)
+## Live URLs (verified)
+
+| App | rastacamp.com | pages.dev |
+|-----|---------------|-----------|
+| MyAir | https://myair.rastacamp.com | https://myair.pages.dev |
+| Rep Battle | https://repbattle.rastacamp.com | https://rep-battle.pages.dev |
+
+---
+
+## Current state
 
 | Item | Location | Status |
 |------|----------|--------|
 | Zone `rastacamp.com` | Leerie account | OK |
-| Tunnel DNS (legacy) | Leerie zone | Intact — not deleted |
-| Pages `myair`, `rep-battle` | Djudo82 account | **Legacy — retire after Leerie migrate** |
-| Custom domains on Djudo82 Pages | — | **Removed** (unstable cross-account) |
-| Manual CNAME → `*.pages.dev` | Leerie DNS | **None** (correct) |
-| `.pages.dev` URLs | Djudo82 | Still work as interim |
-
-**Interim URLs:** https://myair.pages.dev · https://rep-battle.pages.dev
+| Tunnel DNS (legacy) | Leerie zone | Intact |
+| Pages `myair`, `rep-battle` | Djudo82 account | Live |
+| DNS `myair` / `repbattle` CNAME | Leerie zone → `*.pages.dev` | Proxied, active |
 
 ---
 

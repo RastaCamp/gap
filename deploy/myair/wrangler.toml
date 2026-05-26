@@ -1,5 +1,5 @@
-# Leerie account (0f42c247e489dce80771116c30c57c3e) — see deploy/LEERIE_ACCOUNT_SETUP.md
-name = "rastacamp-myair"
+# Pages project on Djudo82 account: myair (custom domain myair.rastacamp.com)
+name = "myair"
 compatibility_date = "2026-05-19"
 pages_build_output_dir = "dist"
 
@@ -7,7 +7,7 @@ pages_build_output_dir = "dist"
 [[d1_databases]]
 binding = "DB"
 database_name = "myair-db"
-database_id = "REPLACE_ON_LEERIE_ACCOUNT"
+database_id = "c7321595-d99f-43ce-b261-bc4d8384179e"
 
 [vars]
 MONTHLY_PRICE_USD = "20"

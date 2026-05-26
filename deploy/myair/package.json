@@ -6,7 +6,7 @@
     "build": "node scripts/build.mjs",
     "db:migrate": "wrangler d1 execute myair-db --remote --file=./schema.sql",
     "db:migrate:local": "wrangler d1 execute myair-db --local --file=./schema.sql",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name=rastacamp-myair --branch=main",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name=myair --branch=main",
     "preview": "npm run build && wrangler pages dev dist"
   },
   "dependencies": {
