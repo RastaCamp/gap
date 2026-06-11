@@ -1,45 +1,44 @@
-# Launch status — 2026-06-10
+# Launch status — 2026-06-11
 
-## Done this session (gap repo → RastaCamp/gap)
+## GAP APIs — all 9 deployed (djudo82 Cloudflare)
 
-| Item | Status |
-|------|--------|
-| Save point tag `savepoint/pre-launch-2026-06-10` | ✅ Pushed |
-| Stripe Payment Links + buy buttons on Pricing pages | ✅ 8/9 APIs (BioSurge uses dashboard subscribe) |
-| Removed public Debug nav + Debug Login buttons | ✅ All Svelte frontends |
-| Worker `/api/debug-login` gated | ✅ `ENABLE_DEBUG_LOGIN=true` only |
-| `deploy/foodsafe` + 8 CI workflows | ✅ |
-| Launch docs | ✅ `launch/EDIT_AND_UPDATE.md`, `DEV_CREDENTIALS.md`, commercial playbook |
-| Pushed to **RastaCamp/gap** | ✅ commit `86535f4` |
-| MyAir redeployed with polish | ✅ |
+| App | pages.dev host | Custom domain | Health |
+|-----|----------------|---------------|--------|
+| myair | myair.pages.dev | myair.rastacamp.com | ✅ |
+| gridstatus | gridstatus.pages.dev | gridstatus.rastacamp.com | ✅ |
+| foodsafe | foodsafe-b7y.pages.dev | foodsafe.rastacamp.com | ✅ |
+| watersafe | watersafe-1og.pages.dev | watersafe.rastacamp.com | ✅ |
+| biosurge | biosurge-7jp.pages.dev | biosurge.rastacamp.com | ✅ |
+| skywatch | skywatch-6im.pages.dev | skywatch.rastacamp.com | ✅ |
+| newssignal | newssignal-d14.pages.dev | newssignal.rastacamp.com | ✅ |
+| neighborhoodscore | neighborhoodscore.pages.dev | neighborhoodscore.rastacamp.com | ✅ |
+| groundtruth | groundtruth-6do.pages.dev | groundtruth.rastacamp.com | ✅ |
 
-## Live rastacamp.com (confirmed earlier)
+**Admin email:** `rastacampllc@gmail.com` (replaces non-existent `admin@rastacamp.com`)  
+**Deploy script:** `node scripts/deploy-all-rastacamp.mjs`  
+**DNS targets:** `launch/dns-targets.json` → run `gh workflow run add-rastacamp-dns.yml -R RastaCamp/gap`
 
-myair, gridstatus, repbattle, biosurge, watersafe
+## Also live
 
-## Deploy remaining gap products
+repbattle.rastacamp.com (Rep Battle web)
 
-```powershell
-cd C:\Users\mxz\Desktop\projects\gap\deploy
-.\finish-deploy-apps.ps1
-```
+## Manual Cloudflare dashboard (per Pages project)
 
-Or trigger GitHub Actions on **RastaCamp/gap** (needs `CLOUDFLARE_*` secrets on that repo).
+- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
+- `DEFAULT_ADMIN_PASSWORD` (email is `rastacampllc@gmail.com` via wrangler.toml)
 
-DNS: use `gh workflow run add-rastacamp-dns.yml -R RastaCamp/gap` — update workflow with correct `*.pages.dev` targets if project names conflict.
+## External apps — not done
 
-## Not done yet (separate repos / next session)
+See `launch/EXTERNAL_APPS.md`: Align, Crumble, Terrorwell, Punchie dev APK + pro gating.
 
-- Dev APK builds (Rep Battle, Align, Crumble, Terrorwell, etc.) — see `launch/EXTERNAL_APPS.md`
-- Rep Battle quit-to-menu bug
-- Align / Audiobook / Punchie pro gating
-- Terrorwell rastacamp.com web deploy
-- Leerie-only Cloudflare consolidation
-- Set `STRIPE_SECRET_KEY` on each Pages project in Cloudflare dashboard
-- Wire Stripe webhooks so Payment Link purchases activate `billing_status`
+**Rep Battle:** quit-to-menu fix committed locally (`1382d93`) — push + rebuild APK.
+
+## Long-term
+
+Migrate all Pages from djudo82 → dedicated Leerie/RastaCamp Cloudflare account.
 
 ## Key files
 
-- Stripe config: `launch/stripe-products.json`
-- How to edit sites: `launch/EDIT_AND_UPDATE.md`
-- Admin bootstrap: `launch/DEV_CREDENTIALS.md`
+- Stripe: `launch/stripe-products.json`
+- Edit sites: `launch/EDIT_AND_UPDATE.md`
+- Credentials: `launch/DEV_CREDENTIALS.md`
