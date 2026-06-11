@@ -1,0 +1,6 @@
+name = "terrorwell"
+compatibility_date = "2026-05-19"
+pages_build_output_dir = "dist"
+
+[vars]
+PUBLIC_STRIPE_PAYMENT_LINK = "https://buy.stripe.com/4gM3cv2Ni8Bt2gvcdO8AE02"

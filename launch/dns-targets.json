@@ -43,5 +43,20 @@
     "name": "groundtruth",
     "target": "groundtruth-6do.pages.dev",
     "domain": "groundtruth.rastacamp.com"
+  },
+  {
+    "name": "punchie",
+    "target": "punchie-rc.pages.dev",
+    "domain": "punchie.rastacamp.com"
+  },
+  {
+    "name": "terrorwell",
+    "target": "terrorwell.pages.dev",
+    "domain": "terrorwell.rastacamp.com"
+  },
+  {
+    "name": "repbattle",
+    "target": "rep-battle.pages.dev",
+    "domain": "repbattle.rastacamp.com"
   }
 ]
