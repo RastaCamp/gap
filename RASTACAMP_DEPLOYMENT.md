@@ -18,6 +18,7 @@ Never add CNAME before Pages custom domain, and never delete the CNAME while the
 |-----|---------------|-----------|
 | MyAir | https://myair.rastacamp.com | https://myair.pages.dev |
 | Rep Battle | https://repbattle.rastacamp.com | https://rep-battle.pages.dev |
+| GridStatus | https://gridstatus.rastacamp.com | https://gridstatus.pages.dev |
 
 ---
 
@@ -27,8 +28,8 @@ Never add CNAME before Pages custom domain, and never delete the CNAME while the
 |------|----------|--------|
 | Zone `rastacamp.com` | Leerie account | OK |
 | Tunnel DNS (legacy) | Leerie zone | Intact |
-| Pages `myair`, `rep-battle` | Djudo82 account | Live |
-| DNS `myair` / `repbattle` CNAME | Leerie zone → `*.pages.dev` | Proxied, active |
+| Pages `myair`, `rep-battle`, `gridstatus` | Djudo82 account | Live |
+| DNS `myair` / `repbattle` / `gridstatus` CNAME | Leerie zone → `*.pages.dev` | Proxied, active |
 
 ---
 

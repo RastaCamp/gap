@@ -16,8 +16,7 @@
     <a href="#/contact">Contact</a>
     <a href="#/login">Login</a> <a href="#/register">Register</a>
     <a href="#/login?admin=1" class="admin-link">Admin</a>
-    <a href="#/login" class="debug">Debug</a>
-  </nav>
+</nav>
 </header>
 <main class="main">
   <section class="hero">
@@ -45,8 +44,7 @@
   .nav a { color: #7DD3FC; text-decoration: none; }
   .nav a:hover { color: #E0F2FE; text-decoration: underline; }
   .nav .admin-link { color: #A5B4FC; }
-  .nav .debug { color: #F59E0B; }
-  .main { max-width: 42rem; margin: 0 auto; padding: 2rem 1.5rem; background: #F8FAFC; }
+  .nav.main { max-width: 42rem; margin: 0 auto; padding: 2rem 1.5rem; background: #F8FAFC; }
   .hero h2 { font-size: 1.5rem; color: #0F172A; margin: 0 0 0.75rem 0; }
   .hero-sub { font-size: 1.05rem; color: #334155; line-height: 1.6; margin-bottom: 1rem; }
   .hero-value { font-size: 0.98rem; color: #475569; line-height: 1.55; margin-bottom: 1.5rem; }

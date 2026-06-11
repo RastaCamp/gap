@@ -70,6 +70,17 @@
     <p><strong>What counts as a request?</strong> Each call to <code>GET /environment</code> (or the equivalent product endpoint) counts as one request, regardless of how many layers you request.</p>
   </section>
 
+  <section class="subscribe">
+    <h2>Subscribe — $19.99/mo</h2>
+    <p>Pay securely with Stripe. After payment, sign in with the same email to unlock API access.</p>
+    <p><a class="pay-link" href="https://buy.stripe.com/cNi7sL1JebNFcV9a5G8AE08" target="_blank" rel="noopener">Open payment page</a></p>
+    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+    <stripe-buy-button
+      buy-button-id="buy_btn_1Th0VpGs5M6VYICJwZARxBm6"
+      publishable-key="pk_live_51Tg9fGGs5M6VYICJjerdsOUmveILN4GaT5XDAsDcvyYJbwsJZaZ7UDhHGdRRULioTBmHFY3bBqfrCkk88eDknb9U00zafoxFpI"
+    ></stripe-buy-button>
+  </section>
+
   <p class="cta-buttons"><a href="#/login" class="btn btn-primary">Start testing</a> <a href="#/docs" class="btn btn-secondary">View API docs</a> <a href="#/contact" class="btn btn-secondary">Book a demo</a> <a href="#/contact" class="btn btn-secondary">Get in touch</a></p>
   <p class="cta"><a href="#/">← Home</a> · <a href="#/features">Features</a> · <a href="#/api">Sell API</a> · <a href="#/service">Sell Service</a></p>
 </div>
@@ -100,4 +111,6 @@
   .btn-secondary { background: #fff; color: #2563EB; border: 1px solid #2563EB; }
   .cta { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E2E8F0; font-size: 0.95rem; }
   .page a { color: #2563EB; }
+  .subscribe { margin: 2rem 0; padding: 1.25rem; border: 1px solid #0a7ea4; border-radius: 8px; background: #f0f9fc; }
+  .pay-link { display: inline-block; margin-bottom: 0.75rem; font-weight: 600; }
 </style>

@@ -1,0 +1,110 @@
+{
+  "publishableKey": "pk_live_51Tg9fGGs5M6VYICJjerdsOUmveILN4GaT5XDAsDcvyYJbwsJZaZ7UDhHGdRRULioTBmHFY3bBqfrCkk88eDknb9U00zafoxFpI",
+  "gapApis": {
+    "foodsafe": {
+      "subdomain": "foodsafe.rastacamp.com",
+      "price": "$19.99/mo",
+      "buyButtonId": "buy_btn_1Th0ZoGs5M6VYICJ0wERCNXf",
+      "paymentLink": "https://buy.stripe.com/eVq28r87C04X7AP3Hi8AE01"
+    },
+    "gridstatus": {
+      "subdomain": "gridstatus.rastacamp.com",
+      "price": "$19.99/mo",
+      "buyButtonId": "buy_btn_1Th0YpGs5M6VYICJKOaVQsQx",
+      "paymentLink": "https://buy.stripe.com/bJeaEXgE86tlg7l3Hi8AE06"
+    },
+    "groundtruth": {
+      "subdomain": "groundtruth.rastacamp.com",
+      "price": "$19.99/mo",
+      "buyButtonId": "buy_btn_1Th0XfGs5M6VYICJ1akmartE",
+      "paymentLink": "https://buy.stripe.com/00wfZhew08Bt9IXcdO8AE07"
+    },
+    "myair": {
+      "subdomain": "myair.rastacamp.com",
+      "price": "$19.99/mo",
+      "buyButtonId": "buy_btn_1Th0VpGs5M6VYICJwZARxBm6",
+      "paymentLink": "https://buy.stripe.com/cNi7sL1JebNFcV9a5G8AE08"
+    },
+    "neighborhoodscore": {
+      "subdomain": "neighborhoodscore.rastacamp.com",
+      "price": "$19.99/mo",
+      "buyButtonId": "buy_btn_1Th0UJGs5M6VYICJ1g6EcJsj",
+      "paymentLink": "https://buy.stripe.com/14AcN5drW2d55sH3Hi8AE09"
+    },
+    "newssignal": {
+      "subdomain": "newssignal.rastacamp.com",
+      "price": "$19.99/mo",
+      "buyButtonId": "buy_btn_1Th0SyGs5M6VYICJXgS5cNKK",
+      "paymentLink": "https://buy.stripe.com/7sY14n0Fa04XcV96Tu8AE0a"
+    },
+    "skywatch": {
+      "subdomain": "skywatch.rastacamp.com",
+      "price": "$19.99/mo",
+      "buyButtonId": "buy_btn_1Th0RmGs5M6VYICJmGgxctpL",
+      "paymentLink": "https://buy.stripe.com/8x200j3Rm5ph08na5G8AE0b"
+    },
+    "watersafe": {
+      "subdomain": "watersafe.rastacamp.com",
+      "price": "$19.99/mo",
+      "buyButtonId": "buy_btn_1Th0QBGs5M6VYICJSfIVfcjU",
+      "paymentLink": "https://buy.stripe.com/8x2aEX3Rmg3V5sH6Tu8AE0c"
+    },
+    "biosurge": {
+      "subdomain": "biosurge.rastacamp.com",
+      "price": "$19.99/mo",
+      "buyButtonId": null,
+      "paymentLink": null,
+      "note": "Use in-app Subscribe after sign-in until Stripe Payment Link is added"
+    }
+  },
+  "appsAndGames": {
+    "rep-battle": {
+      "subdomain": "repbattle.rastacamp.com",
+      "price": "$4.99",
+      "buyButtonId": "buy_btn_1Th096Gs5M6VYICJSbJokzvV",
+      "paymentLink": "https://buy.stripe.com/aFa8wPew004X08ngu48AE0f"
+    },
+    "align": {
+      "subdomain": "align.rastacamp.com",
+      "price": "$4.99",
+      "buyButtonId": "buy_btn_1Th0CtGs5M6VYICJCJaobiQZ",
+      "paymentLink": "https://buy.stripe.com/7sY14new0bNF4oD0v68AE05"
+    },
+    "audiobook-creator": {
+      "subdomain": null,
+      "price": "$7.99/mo",
+      "buyButtonId": "buy_btn_1Th0b1Gs5M6VYICJgzzehUuf",
+      "paymentLink": "https://buy.stripe.com/14AeVd2Ni8Btg7lelW8AE04"
+    },
+    "crumble": {
+      "subdomain": "crumble.rastacamp.com",
+      "price": "$4.99",
+      "buyButtonId": "buy_btn_1Th0GBGs5M6VYICJDiDgJCSn",
+      "paymentLink": "https://buy.stripe.com/28EbJ15Zu6tlcV9a5G8AE03"
+    },
+    "punchie": {
+      "subdomain": "punchie.rastacamp.com",
+      "price": "$7.99/mo",
+      "buyButtonId": "buy_btn_1Th0OuGs5M6VYICJ4PXNPSUG",
+      "paymentLink": "https://buy.stripe.com/cNi14n2NidVN8ET91C8AE0d"
+    },
+    "quotes": {
+      "subdomain": null,
+      "price": "$4.99/mo",
+      "buyButtonId": "buy_btn_1Th0MUGs5M6VYICJYmPdDguW",
+      "paymentLink": "https://buy.stripe.com/bJe14nafKg3V9IX2De8AE0e"
+    },
+    "ascension": {
+      "subdomain": "ascension.rastacamp.com",
+      "price": "$4.99",
+      "buyButtonId": "buy_btn_1Th0JmGs5M6VYICJemfMDmYr",
+      "paymentLink": "https://buy.stripe.com/fZu5kDbjO191bR5dhS8AE00"
+    },
+    "terrorwell": {
+      "subdomain": "terrorwell.rastacamp.com",
+      "price": "$4.99",
+      "buyButtonId": "buy_btn_1Th0IKGs5M6VYICJIA8GZCd1",
+      "paymentLink": "https://buy.stripe.com/4gM3cv2Ni8Bt2gvcdO8AE02"
+    }
+  }
+}

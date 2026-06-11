@@ -1,0 +1,14 @@
+name = "watersafe"
+compatibility_date = "2026-05-19"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "watersafe-db"
+database_id = "412b315e-52fe-421d-b7d9-aead783e91cd"
+
+[vars]
+MONTHLY_PRICE_USD = "20"
+REQUIRE_PAID_API = "true"
+ALLOW_PUBLIC_REGISTER = "true"
+STRIPE_PRODUCT_NAME = "WaterSafe API"

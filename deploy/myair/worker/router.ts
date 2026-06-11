@@ -201,6 +201,7 @@ export async function handleApiRequest(req: Request, env: WorkerEnv): Promise<Re
   }
 
   if (method === "POST" && path === "/api/debug-login") {
+    if (env.ENABLE_DEBUG_LOGIN !== "true") return json({ error: "Not found" }, 404);
     return json({ token: DEBUG_TOKEN, user: { id: "debug", email: "debug@local", role: "debug", billing_status: "active" } });
   }
 

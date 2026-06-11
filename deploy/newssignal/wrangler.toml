@@ -1,0 +1,14 @@
+name = "newssignal"
+compatibility_date = "2026-05-19"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "newssignal-db"
+database_id = "c50d0367-c371-43c1-954c-17e07a4fd1f9"
+
+[vars]
+MONTHLY_PRICE_USD = "20"
+REQUIRE_PAID_API = "true"
+ALLOW_PUBLIC_REGISTER = "true"
+STRIPE_PRODUCT_NAME = "NewsSignal API"

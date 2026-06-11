@@ -1,0 +1,14 @@
+name = "biosurge"
+compatibility_date = "2026-05-19"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "biosurge-db"
+database_id = "b5d828a2-f111-4b33-b655-babe1efc7c09"
+
+[vars]
+MONTHLY_PRICE_USD = "20"
+REQUIRE_PAID_API = "true"
+ALLOW_PUBLIC_REGISTER = "true"
+STRIPE_PRODUCT_NAME = "BioSurge API"

@@ -1,0 +1,14 @@
+name = "skywatch"
+compatibility_date = "2026-05-19"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "skywatch-db"
+database_id = "3fc4cdc1-1aa2-4442-9adb-d6b8e4dc8822"
+
+[vars]
+MONTHLY_PRICE_USD = "20"
+REQUIRE_PAID_API = "true"
+ALLOW_PUBLIC_REGISTER = "true"
+STRIPE_PRODUCT_NAME = "SkyWatch API"

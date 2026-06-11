@@ -1,0 +1,14 @@
+name = "groundtruth"
+compatibility_date = "2026-05-19"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "groundtruth-db"
+database_id = "369f2e59-5bf7-4f59-a9ad-895910e186ef"
+
+[vars]
+MONTHLY_PRICE_USD = "20"
+REQUIRE_PAID_API = "true"
+ALLOW_PUBLIC_REGISTER = "true"
+STRIPE_PRODUCT_NAME = "GroundTruth API"

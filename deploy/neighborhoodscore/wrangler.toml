@@ -1,0 +1,14 @@
+name = "neighborhoodscore"
+compatibility_date = "2026-05-19"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "neighborhoodscore-db"
+database_id = "1f07ecc1-f969-48cf-93e0-b765a3a2fae0"
+
+[vars]
+MONTHLY_PRICE_USD = "20"
+REQUIRE_PAID_API = "true"
+ALLOW_PUBLIC_REGISTER = "true"
+STRIPE_PRODUCT_NAME = "NeighborhoodScore API"

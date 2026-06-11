@@ -1,0 +1,21 @@
+{
+  "name": "biosurge-pages",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "db:migrate": "wrangler d1 execute biosurge-db --remote --file=./schema.sql",
+    "db:migrate:local": "wrangler d1 execute biosurge-db --local --file=./schema.sql",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name=biosurge --branch=main",
+    "preview": "npm run build && wrangler pages dev dist"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "stripe": "^17.4.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250408.0",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.67.0"
+  }
+}

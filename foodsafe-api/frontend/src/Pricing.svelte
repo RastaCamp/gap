@@ -21,6 +21,17 @@
       <li><strong>Enterprise</strong> — Custom: SLAs, custom branding, dedicated success manager</li>
     </ul>
   </section>
+  
+  <section class="subscribe">
+    <h2>Subscribe — <p class="contact">Need a custom plan9.99/mo</h2>
+    <p>Pay securely with Stripe. After payment, sign in with the same email to unlock API access.</p>
+    <p><a class="pay-link" href="https://buy.stripe.com/eVq28r87C04X7AP3Hi8AE01" target="_blank" rel="noopener">Open payment page</a></p>
+    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+    <stripe-buy-button
+      buy-button-id="buy_btn_1Th0ZoGs5M6VYICJ0wERCNXf"
+      publishable-key="pk_live_51Tg9fGGs5M6VYICJjerdsOUmveILN4GaT5XDAsDcvyYJbwsJZaZ7UDhHGdRRULioTBmHFY3bBqfrCkk88eDknb9U00zafoxFpI"
+    ></stripe-buy-button>
+  </section>
   <p class="contact">Need a custom plan or volume discount? <a href="#/api">Get in touch</a> or use the contact details in the footer.</p>
   <p class="cta"><a href="#/">← Home</a> · <a href="#/features">Features</a> · <a href="#/api">Sell API</a> · <a href="#/service">Sell Service</a></p>
 </div>
@@ -42,4 +53,6 @@
   .contact { font-size: 0.95rem; color: #555; margin-bottom: 1rem; }
   .cta { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #eee; font-size: 0.95rem; }
   .page a { color: #0a7ea4; }
+  .subscribe { margin: 2rem 0; padding: 1.25rem; border: 1px solid #0a7ea4; border-radius: 8px; background: #f0f9fc; }
+  .pay-link { display: inline-block; margin-bottom: 0.75rem; font-weight: 600; }
 </style>

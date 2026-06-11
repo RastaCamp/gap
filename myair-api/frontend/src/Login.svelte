@@ -28,20 +28,6 @@
     location.hash =
       user?.role === "admin" ? "#/admin" : "#/dashboard";
   }
-
-  async function doDebugLogin() {
-    error = "";
-    const res = await fetch("/api/debug-login", { method: "POST" });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      error = data.error || "Debug login disabled";
-      return;
-    }
-    token = data.token;
-    user = data.user;
-    if (token) localStorage.setItem("token", token);
-    location.hash = "#/admin";
-  }
 </script>
 
 <div class="login">
@@ -65,10 +51,7 @@
   </form>
   <p class="register">
     No account? <a href="#/register">Create one</a>
-  </p>
-  <p class="debug-label">Dev only:</p>
-  <button class="debug" type="button" on:click={doDebugLogin}>Debug Login</button>
-  {#if error}<p class="error">{error}</p>{/if}
+  </p>{#if error}<p class="error">{error}</p>{/if}
   <p><a href="#/">← Back to home</a></p>
 </div>
 
@@ -114,18 +97,7 @@
   .login .register {
     margin-top: 1rem;
     font-size: 0.95rem;
-  }
-  .login .debug-label {
-    font-size: 0.85rem;
-    color: #666;
-    margin-top: 1rem;
-    margin-bottom: 0.25rem;
-  }
-  .login .debug {
-    background: #f0c674;
-    color: #222;
-  }
-  .error {
+  }.error {
     color: #c00;
     margin-top: 0.5rem;
   }
