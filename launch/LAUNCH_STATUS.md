@@ -27,11 +27,14 @@ repbattle.rastacamp.com (Rep Battle web)
 - `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
 - `DEFAULT_ADMIN_PASSWORD` (email is `rastacampllc@gmail.com` via wrangler.toml)
 
-## External apps — not done
+## External apps — partial
 
-See `launch/EXTERNAL_APPS.md`: Align, Crumble, Terrorwell, Punchie dev APK + pro gating.
-
-**Rep Battle:** quit-to-menu fix committed locally (`1382d93`) — push + rebuild APK.
+| App | Status |
+|-----|--------|
+| Rep Battle | Quit-to-menu fix pushed; debug APK at `rep battle/build/app/outputs/flutter-apk/app-debug.apk` |
+| Align | Pro dice gating + Settings toggle; debug APK at `align/android/app/build/outputs/apk/debug/app-debug.apk` |
+| Crumble | Pro toggle already in UI — build APK from `crumble` when ready |
+| Terrorwell / Punchie | Not started — see `launch/EXTERNAL_APPS.md` |
 
 ## Long-term
 
