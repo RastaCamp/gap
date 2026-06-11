@@ -58,5 +58,30 @@
     "name": "repbattle",
     "target": "rep-battle.pages.dev",
     "domain": "repbattle.rastacamp.com"
+  },
+  {
+    "name": "align",
+    "target": "align-7wv.pages.dev",
+    "domain": "align.rastacamp.com"
+  },
+  {
+    "name": "crumble",
+    "target": "crumble-7hl.pages.dev",
+    "domain": "crumble.rastacamp.com"
+  },
+  {
+    "name": "audiobook",
+    "target": "audiobook-creator.pages.dev",
+    "domain": "audiobook.rastacamp.com"
+  },
+  {
+    "name": "quotes",
+    "target": "quotes-20a.pages.dev",
+    "domain": "quotes.rastacamp.com"
+  },
+  {
+    "name": "ascension",
+    "target": "ascensions.pages.dev",
+    "domain": "ascension.rastacamp.com"
   }
 ]

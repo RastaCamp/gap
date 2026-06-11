@@ -71,7 +71,7 @@
       "paymentLink": "https://buy.stripe.com/7sY14new0bNF4oD0v68AE05"
     },
     "audiobook-creator": {
-      "subdomain": null,
+      "subdomain": "audiobook.rastacamp.com",
       "price": "$7.99/mo",
       "buyButtonId": "buy_btn_1Th0b1Gs5M6VYICJgzzehUuf",
       "paymentLink": "https://buy.stripe.com/14AeVd2Ni8Btg7lelW8AE04"
@@ -89,7 +89,7 @@
       "paymentLink": "https://buy.stripe.com/cNi14n2NidVN8ET91C8AE0d"
     },
     "quotes": {
-      "subdomain": null,
+      "subdomain": "quotes.rastacamp.com",
       "price": "$4.99/mo",
       "buyButtonId": "buy_btn_1Th0MUGs5M6VYICJYmPdDguW",
       "paymentLink": "https://buy.stripe.com/bJe14nafKg3V9IX2De8AE0e"
