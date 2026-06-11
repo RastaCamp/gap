@@ -1,0 +1,47 @@
+[
+  {
+    "name": "myair",
+    "target": "myair.pages.dev",
+    "domain": "myair.rastacamp.com"
+  },
+  {
+    "name": "gridstatus",
+    "target": "gridstatus.pages.dev",
+    "domain": "gridstatus.rastacamp.com"
+  },
+  {
+    "name": "foodsafe",
+    "target": "foodsafe-b7y.pages.dev",
+    "domain": "foodsafe.rastacamp.com"
+  },
+  {
+    "name": "watersafe",
+    "target": "watersafe-1og.pages.dev",
+    "domain": "watersafe.rastacamp.com"
+  },
+  {
+    "name": "biosurge",
+    "target": "biosurge-7jp.pages.dev",
+    "domain": "biosurge.rastacamp.com"
+  },
+  {
+    "name": "skywatch",
+    "target": "skywatch-6im.pages.dev",
+    "domain": "skywatch.rastacamp.com"
+  },
+  {
+    "name": "newssignal",
+    "target": "newssignal-d14.pages.dev",
+    "domain": "newssignal.rastacamp.com"
+  },
+  {
+    "name": "neighborhoodscore",
+    "target": "neighborhoodscore.pages.dev",
+    "domain": "neighborhoodscore.rastacamp.com"
+  },
+  {
+    "name": "groundtruth",
+    "target": "groundtruth-6do.pages.dev",
+    "domain": "groundtruth.rastacamp.com"
+  }
+]

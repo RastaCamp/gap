@@ -275,7 +275,7 @@ export type UserRow = {
 async function seedDefaultAdminIfConfigured(): Promise<void> {
   const password = process.env.DEFAULT_ADMIN_PASSWORD?.trim();
   if (!password) return;
-  const email = (process.env.DEFAULT_ADMIN_EMAIL ?? "admin@local").trim().toLowerCase();
+  const email = (process.env.DEFAULT_ADMIN_EMAIL ?? "rastacampllc@gmail.com").trim().toLowerCase();
   const ph = await hashPassword(password);
   let user = getUserByEmail(email);
   if (!user) {

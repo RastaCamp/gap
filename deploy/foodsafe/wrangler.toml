@@ -5,9 +5,10 @@ pages_build_output_dir = "dist"
 [[d1_databases]]
 binding = "DB"
 database_name = "foodsafe-db"
-database_id = "REPLACE_AFTER_D1_CREATE"
+database_id = "b7f8c98c-61be-4349-88c9-0eb965bd5ce3"
 
 [vars]
+DEFAULT_ADMIN_EMAIL = "rastacampllc@gmail.com"
 MONTHLY_PRICE_USD = "19.99"
 REQUIRE_PAID_API = "true"
 ALLOW_PUBLIC_REGISTER = "true"

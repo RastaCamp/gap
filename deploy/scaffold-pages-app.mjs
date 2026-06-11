@@ -138,7 +138,7 @@ export type DataRow = Record<string, unknown>;
 export async function seedDefaultAdminIfConfigured(env: WorkerEnv): Promise<void> {
   const password = env.DEFAULT_ADMIN_PASSWORD?.trim();
   if (!password) return;
-  const email = (env.DEFAULT_ADMIN_EMAIL ?? "admin@local").trim().toLowerCase();
+  const email = (env.DEFAULT_ADMIN_EMAIL ?? "rastacampllc@gmail.com").trim().toLowerCase();
   const ph = await hashPassword(password);
   let user = await getUserByEmail(env, email);
   if (!user) {

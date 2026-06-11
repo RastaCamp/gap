@@ -8,7 +8,8 @@ database_name = "groundtruth-db"
 database_id = "369f2e59-5bf7-4f59-a9ad-895910e186ef"
 
 [vars]
-MONTHLY_PRICE_USD = "20"
+DEFAULT_ADMIN_EMAIL = "rastacampllc@gmail.com"
+MONTHLY_PRICE_USD = "19.99"
 REQUIRE_PAID_API = "true"
 ALLOW_PUBLIC_REGISTER = "true"
 STRIPE_PRODUCT_NAME = "GroundTruth API"

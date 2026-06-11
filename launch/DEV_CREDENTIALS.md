@@ -8,14 +8,14 @@ When `DEFAULT_ADMIN_PASSWORD` is set on first deploy, the worker creates:
 
 | Field | Default |
 |-------|---------|
-| Email | `admin@rastacamp.com` (or `DEFAULT_ADMIN_EMAIL`) |
+| Email | `rastacampllc@gmail.com` (or `DEFAULT_ADMIN_EMAIL`) |
 | Password | value of `DEFAULT_ADMIN_PASSWORD` |
 | Role | `admin` |
 
 Suggested launch values (rotate after go-live):
 
 ```
-DEFAULT_ADMIN_EMAIL=admin@rastacamp.com
+DEFAULT_ADMIN_EMAIL=rastacampllc@gmail.com
 DEFAULT_ADMIN_PASSWORD=RastaCamp-Launch-2026!
 ```
 

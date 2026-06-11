@@ -10,7 +10,8 @@ database_name = "myair-db"
 database_id = "c7321595-d99f-43ce-b261-bc4d8384179e"
 
 [vars]
-MONTHLY_PRICE_USD = "20"
+DEFAULT_ADMIN_EMAIL = "rastacampllc@gmail.com"
+MONTHLY_PRICE_USD = "19.99"
 REQUIRE_PAID_API = "true"
 ALLOW_PUBLIC_REGISTER = "true"
 STRIPE_PRODUCT_NAME = "MyAir API"

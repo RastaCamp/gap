@@ -7,25 +7,58 @@ jobs:
   dns:
     runs-on: ubuntu-latest
     steps:
-      - name: Add biosurge and watersafe CNAME records
+      - uses: actions/checkout@v4
+
+      - name: Sync CNAME records from launch/dns-targets.json
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
           ZONE=cf52be49bca453715fc5e899b6941fef
+          export ZONE CLOUDFLARE_API_TOKEN
+
           add_cname() {
             local name="$1"
             local target="$2"
             existing=$(curl -s "https://api.cloudflare.com/client/v4/zones/$ZONE/dns_records?type=CNAME&name=${name}.rastacamp.com" \
               -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN")
-            if echo "$existing" | grep -q "\"count\":0"; then
+            if echo "$existing" | grep -q '"count":0'; then
+              echo "Creating ${name}.rastacamp.com → $target"
               curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE/dns_records" \
                 -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
                 -H "Content-Type: application/json" \
                 --data "{\"type\":\"CNAME\",\"name\":\"$name\",\"content\":\"$target\",\"proxied\":true,\"ttl\":1}"
             else
-              echo "$name already exists"
-              echo "$existing"
+              id=$(echo "$existing" | python3 -c "import sys,json; r=json.load(sys.stdin)['result']; print(r[0]['id'] if r else '')")
+              current=$(echo "$existing" | python3 -c "import sys,json; r=json.load(sys.stdin)['result']; print(r[0]['content'] if r else '')")
+              if [ "$current" != "$target" ] && [ -n "$id" ]; then
+                echo "Updating ${name}.rastacamp.com: $current → $target"
+                curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$ZONE/dns_records/$id" \
+                  -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+                  -H "Content-Type: application/json" \
+                  --data "{\"type\":\"CNAME\",\"name\":\"$name\",\"content\":\"$target\",\"proxied\":true,\"ttl\":1}"
+              else
+                echo "${name}.rastacamp.com already points to $current"
+              fi
             fi
           }
-          add_cname biosurge biosurge-7jp.pages.dev
-          add_cname watersafe watersafe-1og.pages.dev
+          export -f add_cname
+
+          python3 - <<'PY'
+          import json, os, subprocess
+
+          path = "launch/dns-targets.json"
+          if os.path.isfile(path):
+              with open(path) as f:
+                  targets = json.load(f)
+          else:
+              targets = [
+                  {"name": "myair", "target": "myair.pages.dev"},
+                  {"name": "gridstatus", "target": "gridstatus.pages.dev"},
+                  {"name": "biosurge", "target": "biosurge-7jp.pages.dev"},
+                  {"name": "watersafe", "target": "watersafe-1og.pages.dev"},
+                  {"name": "repbattle", "target": "rep-battle.pages.dev"},
+              ]
+
+          for row in targets:
+              subprocess.run(["bash", "-c", f'add_cname "{row["name"]}" "{row["target"]}"'], check=False)
+          PY

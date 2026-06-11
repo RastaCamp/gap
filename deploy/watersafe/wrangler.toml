@@ -8,7 +8,8 @@ database_name = "watersafe-db"
 database_id = "412b315e-52fe-421d-b7d9-aead783e91cd"
 
 [vars]
-MONTHLY_PRICE_USD = "20"
+DEFAULT_ADMIN_EMAIL = "rastacampllc@gmail.com"
+MONTHLY_PRICE_USD = "19.99"
 REQUIRE_PAID_API = "true"
 ALLOW_PUBLIC_REGISTER = "true"
 STRIPE_PRODUCT_NAME = "WaterSafe API"
