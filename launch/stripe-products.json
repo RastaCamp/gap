@@ -53,8 +53,9 @@
       "subdomain": "biosurge.rastacamp.com",
       "price": "$19.99/mo",
       "buyButtonId": null,
-      "paymentLink": null,
-      "note": "Use in-app Subscribe after sign-in until Stripe Payment Link is added"
+      "paymentLink": "https://buy.stripe.com/6oUeVd1JebNF1cr2De8AE0g",
+      "successRedirect": "https://biosurge.rastacamp.com/#/login?subscribed=1",
+      "stripePriceId": "price_1ThIlIGs5M6VYICJKpvyQt8n"
     }
   },
   "appsAndGames": {

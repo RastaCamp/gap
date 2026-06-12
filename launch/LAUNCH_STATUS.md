@@ -59,9 +59,11 @@ gh workflow run add-rastacamp-dns.yml -R RastaCamp/gap
 ## Still manual / post-launch
 
 - Rotate Stripe keys before public launch (keys used in dev session only)
-- Set `STRIPE_SECRET_KEY` + webhooks on GAP API Pages projects for subscription entitlements
-- Biosurge: no Payment Link yet — in-app subscribe after sign-in
+- Verify `STRIPE_SECRET_KEY` + webhooks on **all** GAP API Pages projects (BioSurge done; audit others)
+- Game apps: only Ascension auto-unlocks Pro from Stripe redirect; others use dev toggles until entitlement wiring
 - Punchie PM/media routes on cloud worker are partial — homeowner mode fully works
+
+Full details: **`launch/LAUNCH_UPDATES_AND_CAPABILITIES.md`**
 
 ## Docs
 

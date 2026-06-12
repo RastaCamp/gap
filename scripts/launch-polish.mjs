@@ -69,24 +69,33 @@ function stripeBlock(productKey) {
     neighborhoodscore: "neighborhoodscore",
   };
   const p = stripe.gapApis[map[productKey]];
-  if (!p?.buyButtonId) return "";
+  if (!p?.paymentLink) return "";
+  const btn = p.buyButtonId
+    ? `<script async src="https://js.stripe.com/v3/buy-button.js"></script>
+    <stripe-buy-button
+      buy-button-id="${p.buyButtonId}"
+      publishable-key="${STRIPE_KEY}"
+    ></stripe-buy-button>`
+    : "";
   return `
   <section class="subscribe">
     <h2>Subscribe — ${p.price}</h2>
     <p>Pay securely with Stripe. After payment, sign in with the same email to unlock API access.</p>
     <p><a class="pay-link" href="${p.paymentLink}" target="_blank" rel="noopener">Open payment page</a></p>
-    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
-    <stripe-buy-button
-      buy-button-id="${p.buyButtonId}"
-      publishable-key="${STRIPE_KEY}"
-    ></stripe-buy-button>
+    ${btn}
   </section>`;
 }
 
 function injectPricingStripe(content, productKey) {
   const block = stripeBlock(productKey);
-  if (!block || content.includes("stripe-buy-button")) return content;
-  if (content.includes('class="subscribe"')) return content;
+  if (!block) return content;
+  if (content.includes("stripe-buy-button") || content.includes("buy.stripe.com")) return content;
+  if (content.includes('class="subscribe"')) {
+    return content.replace(
+      /<section class="subscribe">[\s\S]*?<\/section>/,
+      block.trim()
+    );
+  }
   return content.replace(
     /(\s*<\/section>\s*\n)(\s*<p class="contact">Need a custom plan)/,
     `$1${block}\n$2`

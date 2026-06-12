@@ -15,9 +15,9 @@
     <li><strong>Enterprise</strong> — Custom: SLAs, custom branding, dedicated success manager</li>
   </ul></section>
   <section class="subscribe">
-    <h2>Subscribe after sign-in</h2>
-    <p>Create an account, then use <strong>Subscribe</strong> on the dashboard for API access ($19.99/mo).</p>
-    <p><a class="pay-link" href="#/register">Create account</a> · <a class="pay-link" href="#/login">Sign in</a></p>
+    <h2>Subscribe — $19.99/mo</h2>
+    <p>Pay securely with Stripe. After payment, sign in with the same email to unlock API access.</p>
+    <p><a class="pay-link" href="https://buy.stripe.com/6oUeVd1JebNF1cr2De8AE0g" target="_blank" rel="noopener">Open payment page</a></p>
   </section>
   <p class="contact">Need a custom plan or volume discount? <a href="#/api">Get in touch</a> or use the contact details in the footer.</p>
   <p class="cta"><a href="#/">← Home</a> · <a href="#/features">Features</a> · <a href="#/api">Sell API</a> · <a href="#/service">Sell Service</a></p>
