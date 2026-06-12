@@ -36,6 +36,8 @@ const NEW = [
   { project: "audiobook-creator", name: "audiobook-creator", dnsName: "audiobook", domain: "audiobook.rastacamp.com" },
   { project: "quotes", name: "quotes", dnsName: "quotes", domain: "quotes.rastacamp.com" },
   { project: "ascensions", name: "ascension", dnsName: "ascension", domain: "ascension.rastacamp.com" },
+  { project: "punchie-rc", name: "punchie", dnsName: "punchie", domain: "punchie.rastacamp.com" },
+  { project: "terrorwell", name: "terrorwell", dnsName: "terrorwell", domain: "terrorwell.rastacamp.com" },
 ];
 
 const list = JSON.parse(sh("npx --yes wrangler@4 pages project list --json"));

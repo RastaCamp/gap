@@ -98,7 +98,8 @@
       "subdomain": "ascension.rastacamp.com",
       "price": "$4.99",
       "buyButtonId": "buy_btn_1Th0JmGs5M6VYICJemfMDmYr",
-      "paymentLink": "https://buy.stripe.com/fZu5kDbjO191bR5dhS8AE00"
+      "paymentLink": "https://buy.stripe.com/fZu5kDbjO191bR5dhS8AE00",
+      "successRedirect": "https://ascension.rastacamp.com/?purchase=success"
     },
     "terrorwell": {
       "subdomain": "terrorwell.rastacamp.com",

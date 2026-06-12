@@ -45,19 +45,14 @@
     "domain": "groundtruth.rastacamp.com"
   },
   {
-    "name": "punchie",
-    "target": "punchie-rc.pages.dev",
-    "domain": "punchie.rastacamp.com"
-  },
-  {
-    "name": "terrorwell",
-    "target": "terrorwell.pages.dev",
-    "domain": "terrorwell.rastacamp.com"
-  },
-  {
     "name": "repbattle",
     "target": "rep-battle.pages.dev",
     "domain": "repbattle.rastacamp.com"
+  },
+  {
+    "name": "audiobook",
+    "target": "audiobook-creator.pages.dev",
+    "domain": "audiobook.rastacamp.com"
   },
   {
     "name": "align",
@@ -70,7 +65,7 @@
     "domain": "crumble.rastacamp.com"
   },
   {
-    "name": "audiobook",
+    "name": "audiobook-creator",
     "target": "audiobook-creator.pages.dev",
     "domain": "audiobook.rastacamp.com"
   },
@@ -83,5 +78,15 @@
     "name": "ascension",
     "target": "ascensions.pages.dev",
     "domain": "ascension.rastacamp.com"
+  },
+  {
+    "name": "punchie",
+    "target": "punchie-rc.pages.dev",
+    "domain": "punchie.rastacamp.com"
+  },
+  {
+    "name": "terrorwell",
+    "target": "terrorwell.pages.dev",
+    "domain": "terrorwell.rastacamp.com"
   }
 ]
