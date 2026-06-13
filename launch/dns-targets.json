@@ -88,5 +88,10 @@
     "name": "terrorwell",
     "target": "terrorwell.pages.dev",
     "domain": "terrorwell.rastacamp.com"
+  },
+  {
+    "name": "7days",
+    "target": "html-games-2c2.pages.dev",
+    "domain": "7days.rastacamp.com"
   }
 ]
