@@ -17,7 +17,16 @@ jobs:
         run: |
           set -euo pipefail
           api() {
-            curl -sf "$@" -H "Authorization: Bearer $CF_TOKEN" -H "Content-Type: application/json"
+            local out
+            out=$(curl -sS -w "\nHTTP_CODE:%{http_code}" "$@" -H "Authorization: Bearer $CF_TOKEN" -H "Content-Type: application/json")
+            local code="${out##*HTTP_CODE:}"
+            local body="${out%HTTP_CODE:*}"
+            if [ "$code" -lt 200 ] || [ "$code" -ge 300 ]; then
+              echo "Cloudflare API error HTTP $code:" >&2
+              echo "$body" >&2
+              return 1
+            fi
+            echo "$body"
           }
 
           tunnels=$(api "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT}/cfd_tunnel")
