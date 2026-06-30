@@ -93,5 +93,10 @@
     "name": "7days",
     "target": "html-games-2c2.pages.dev",
     "domain": "7days.rastacamp.com"
+  },
+  {
+    "name": "mira",
+    "target": "48778aff-48d6-44f8-841e-49ed00d2ed17.cfargotunnel.com",
+    "domain": "mira.rastacamp.com"
   }
 ]
