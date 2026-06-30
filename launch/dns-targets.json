@@ -98,5 +98,10 @@
     "name": "mira",
     "target": "48778aff-48d6-44f8-841e-49ed00d2ed17.cfargotunnel.com",
     "domain": "mira.rastacamp.com"
+  },
+  {
+    "name": "xxl",
+    "target": "xxl-a7y.pages.dev",
+    "domain": "xxl.rastacamp.com"
   }
 ]
