@@ -1,0 +1,67 @@
+name: Provision Mira tunnel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create tunnel, DNS, and connector token
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          ZONE_ID: cf52be49bca453715fc5e899b6941fef
+          TUNNEL_NAME: mira-socials
+          HOSTNAME: mira.rastacamp.com
+        run: |
+          set -euo pipefail
+          api() {
+            curl -sf "$@" -H "Authorization: Bearer $CF_TOKEN" -H "Content-Type: application/json"
+          }
+
+          tunnels=$(api "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT}/cfd_tunnel")
+          tunnel_id=$(echo "$tunnels" | python3 -c "
+          import sys, json
+          data = json.load(sys.stdin)['result']
+          for t in data:
+              if t.get('name')=='${TUNNEL_NAME}' and not t.get('deleted_at'):
+                  print(t['id']); break
+          ")
+          if [ -z "$tunnel_id" ]; then
+            created=$(api -X POST "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT}/cfd_tunnel" \
+              --data '{"name":"'"${TUNNEL_NAME}"'","config_src":"cloudflare"}')
+            tunnel_id=$(echo "$created" | python3 -c "import sys,json; print(json.load(sys.stdin)['result']['id'])")
+            echo "Created tunnel ${TUNNEL_NAME} (${tunnel_id})"
+          else
+            echo "Using tunnel ${TUNNEL_NAME} (${tunnel_id})"
+          fi
+
+          api -X PUT "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT}/cfd_tunnel/${tunnel_id}/configurations" \
+            --data '{"config":{"ingress":[{"hostname":"'"${HOSTNAME}"'","service":"http://127.0.0.1:3001"},{"service":"http_status:404"}]}}' \
+            > /dev/null
+          echo "Ingress: ${HOSTNAME} -> http://127.0.0.1:3001"
+
+          cname="${tunnel_id}.cfargotunnel.com"
+          existing=$(api "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records?type=CNAME&name=${HOSTNAME}")
+          count=$(echo "$existing" | python3 -c "import sys,json; print(json.load(sys.stdin)['result_info']['count'])")
+          if [ "$count" = "0" ]; then
+            api -X POST "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records" \
+              --data '{"type":"CNAME","name":"mira","content":"'"${cname}"'","proxied":true,"ttl":1}' > /dev/null
+            echo "DNS: mira -> ${cname}"
+          else
+            rec_id=$(echo "$existing" | python3 -c "import sys,json; print(json.load(sys.stdin)['result'][0]['id'])")
+            api -X PUT "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records/${rec_id}" \
+              --data '{"type":"CNAME","name":"mira","content":"'"${cname}"'","proxied":true,"ttl":1}' > /dev/null
+            echo "DNS updated: mira -> ${cname}"
+          fi
+
+          token=$(api "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT}/cfd_tunnel/${tunnel_id}/token" | python3 -c "import sys,json; r=json.load(sys.stdin)['result']; print(r if isinstance(r,str) else r.get('token',''))")
+          printf '%s' "$token" > mira-tunnel-token.txt
+          echo "Tunnel token ready for local cloudflared connector"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mira-tunnel-token
+          path: mira-tunnel-token.txt
+          retention-days: 2
